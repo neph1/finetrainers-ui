@@ -7,8 +7,7 @@ class RunCogVideoX:
         self.run_cogvideox(cogvideo_path, settings)
 
     def run_cogvideox(self, cogvideo_path, settings):
-
-        cmd = f"accelerate launch --config_file {settings['accelerate_config']} --gpu_ids {settings['gpu_ids']}  {cogvideo_path}training/{settings['training_type']} "
+        cmd = f"accelerate launch --config_file {cogvideo_path}/accelerate_configs/{settings['accelerate_config']} --gpu_ids {settings['gpu_ids']}  {cogvideo_path}/training/{settings['training_type']}.py "
         for key, value in settings.items():
             if key in ["accelerate_config", "training_type", "gpu_ids"]:
                 continue
@@ -19,5 +18,4 @@ class RunCogVideoX:
             cmd += f"--{key} {value} "
 
         print(cmd)
-
         subprocess.run(cmd, shell=True)
