@@ -15,7 +15,8 @@ class RunCogVideoX:
                 continue
             if value is True:
                 cmd += f"--{key} "
-            cmd += f"--{key} {value} "
+            else:
+                cmd += f"--{key} {value} "
 
         print(cmd)
         subprocess.run(cmd, shell=True)
