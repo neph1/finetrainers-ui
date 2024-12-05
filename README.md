@@ -10,4 +10,24 @@ Load and save configurations
 Copies the config to the output folder for easy look up later
 
 
+Usage:
+
+Have CogvideoX-Factory
+
+Clone repo
+
+Install streamlit
+
+Run with `streamlit run app.py`
+
+Config path to cogvideox-factory in app
+
+Configure your run
+
+Press run
+
+Cross fingers and hope it works
+
+
+
 Early days: May not work as expected.
