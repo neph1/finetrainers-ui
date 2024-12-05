@@ -16,7 +16,7 @@ Have CogvideoX-Factory
 
 Clone repo
 
-Install streamlit
+Install streamlit `pip install streamlit`
 
 Run with `streamlit run app.py`
 
