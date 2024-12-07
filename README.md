@@ -1,7 +1,7 @@
 # cogvideox-factory-ui
 
 
-Simple GUI for [cogvideox-factory](https://github.com/a-r-r-o-w/cogvideox-factory) made using gradio, inspired by bmalthais gui for kohya-ss scripts.
+Simple GUI for [cogvideox-factory](https://github.com/a-r-r-o-w/cogvideox-factory) (but in no way affiliated with it) made using gradio, inspired by bmalthais gui for kohya-ss scripts.
 
 Doesn't contain cogvideox-factory. You must download it and get it running separately.
 
