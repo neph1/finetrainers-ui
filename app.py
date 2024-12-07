@@ -17,7 +17,7 @@ class App:
 
     def setup_views(self):
         with gr.Blocks() as demo:
-            gr.Markdown("### YAML Config Editor")
+            gr.Markdown("### cogvideox-factory config editor")
 
             with gr.Tab("General Settings"):
                 self.tabs['general'] = Tab("General Settings", self.general_config_path)
