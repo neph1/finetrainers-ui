@@ -2,6 +2,8 @@ from typing import OrderedDict
 import gradio as gr
 import yaml
 
+from config import global_config
+
 properties = OrderedDict()
 class Tab:
     def __init__(self, title, config_file_path, allow_load=False):
@@ -15,14 +17,16 @@ class Tab:
         self.config_inputs = gr.Column("Settings")
         self.save_status = gr.Markdown()
         try:
-            config = self.load_config(config_file_path)
+            self.config = self.load_config(config_file_path)
+            for key, value in self.config.items():
+                global_config.set(key, value)
             with self.config_inputs:
-                self.components = OrderedDict(self.update_form(config))
+                self.components = OrderedDict(self.update_form(self.config))
                 for i in range(len(self.config_inputs.children)):
                     keys = list(self.components.keys())
                     properties[keys[i]]=self.config_inputs.children[i]
         except Exception as e:
-            gr.error(f"Error loading config file: {e}")
+            gr.Error(f"Error loading config file: {e}")
 
         self.add_buttons()
 
@@ -34,7 +38,7 @@ class Tab:
     def save_config(self, file_path):
         """Save the current configuration to a YAML file."""
         with open(file_path, "w") as file:
-            yaml.dump(self.get_config(), file, default_flow_style=False)
+            yaml.dump(self.config, file, default_flow_style=False)
 
     def save_edits(self, config_file, *inputs):
         try:
@@ -83,21 +87,16 @@ class Tab:
                 inputs[key] = (gr.Textbox(value=str(value), label=key))  # Default to text for unsupported types
         return inputs
 
-def get_config()-> dict:
-    config = dict()
-    for key, value in properties.items():
-        config[key] = value.value
-    return config
-
 def render_editor(*args):
     inputs = list(args)
     try:
         with open(inputs[0], "r") as file:
-            config = yaml.safe_load(file)
+            new_config = yaml.safe_load(file)
         props_list = list(properties.keys())
-        for key, value in config.items():
+        for key, value in new_config.items():
             index = props_list.index(key) + 1
             inputs[index] = value
+            global_config.set(key, value)
         return ["Config loaded. Edit below:", *inputs[1:]]
     except Exception as e:
         return [f"Error loading config: {e}", *inputs[1:]]

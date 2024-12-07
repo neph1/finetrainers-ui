@@ -1,15 +1,19 @@
 import subprocess
 
+from config import global_config
 
 class RunCogVideoX:
 
-    def __init__(self, cogvideo_path, settings):
-        self.run_cogvideox(cogvideo_path, settings)
+    def __init__(self):
+        self.run_cogvideox()
 
-    def run_cogvideox(self, cogvideo_path, settings):
-        cmd = f"accelerate launch --config_file {cogvideo_path}/accelerate_configs/{settings['accelerate_config']} --gpu_ids {settings['gpu_ids']}  {cogvideo_path}/training/{settings['training_type']}.py "
-        for key, value in settings.items():
-            if key in ["accelerate_config", "training_type", "gpu_ids"]:
+    def run_cogvideox(self):
+        settings = global_config
+        cmd = f"accelerate launch --config_file {settings.get_cogvideox_factory_path()}/accelerate_configs/{settings.get('accelerate_config')} --gpu_ids {settings.get('gpu_ids')}  {settings.get_cogvideox_factory_path()}/training/{settings.get('training_type')}.py "
+        for key, value in settings.get_all():
+            if key in ["accelerate_config", "training_type", "gpu_ids", "path_to_cogvideox_factory"]:
+                continue
+            if not value:
                 continue
             if value is False:
                 continue

@@ -1,7 +1,7 @@
 # cogvideox-factory-ui
 
 
-Simple GUI for cogvideox-factory made with streamlit inspired by bmalthais gui for kohya-ss scripts.
+Simple GUI for cogvideox-factory made with gradio inspired by bmalthais gui for kohya-ss scripts.
 
 Doesn't contain cogvideox-factory. You must download it and get it running separately.
 
@@ -16,13 +16,13 @@ Have CogvideoX-Factory
 
 Clone repo
 
-Install streamlit `pip install streamlit`
+Install streamlit `pip install gradio`
 
-Run with `streamlit run app.py`
+Run with `python app.py`
 
 Config path to cogvideox-factory in app
 
-Configure your run
+Configure your runtime settings
 
 Press run
 

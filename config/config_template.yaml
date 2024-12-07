@@ -1,7 +1,7 @@
-training_type: ['cogvideox_text_to_video_sft', 'cogvideox_text_to_video_lora', 'cogvideox_image_to_video_lora']
+training_type: 'cogvideox_text_to_video_sft'
 accelerate_config: 'uncompiled_1.yaml'
 gpu_ids: '0'
-pretrained_model_name-or_path: ''
+pretrained_model_name_or_path: ''
 data_root: ''
 caption_column: 'prompt.txt'
 video_column: 'videos.txt'
@@ -40,5 +40,6 @@ max_grad_norm: 1.0
 allow_tf32: true
 nccl_timeout: 1800
 resume_from_checkpoint: ''
+use_learned_positional_embeddings: true
 
 
