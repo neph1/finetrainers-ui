@@ -1,4 +1,4 @@
-training_type: ['cogvideox_text_to_video_sft', 'cogvideox_image_to_video_sft']
+training_type: ['cogvideox_text_to_video_sft', 'cogvideox_text_to_video_lora', 'cogvideox_image_to_video_lora']
 accelerate_config: 'uncompiled_1.yaml'
 gpu_ids: '0'
 pretrained_model_name-or_path: ''
