@@ -3,15 +3,15 @@ import gradio as gr
 import yaml
 
 from config import global_config
+import editor_factory
 
 properties = OrderedDict()
 class Tab:
     def __init__(self, title, config_file_path, allow_load=False):
         self.title = title
-        self.config_file_path = config_file_path
-        self.session_key = f"config_{title}" 
+        #self.config_file_path = config_file_path
         self.allow_load = allow_load
-        gr.Markdown("### YAML Config Editor")
+        gr.Markdown(title)
     
         self.status = gr.Markdown()
         self.config_inputs = gr.Column("Settings")
@@ -24,39 +24,46 @@ class Tab:
                 self.components = OrderedDict(self.update_form(self.config))
                 for i in range(len(self.config_inputs.children)):
                     keys = list(self.components.keys())
-                    properties[keys[i]]=self.config_inputs.children[i]
+                    properties[keys[i]] = self.config_inputs.children[i]
         except Exception as e:
             gr.Error(f"Error loading config file: {e}")
-
+        self.config_file_box = gr.Textbox(value=config_file_path, label="Config file")
         self.add_buttons()
 
     def load_config(self, file_path):
-        """Load a YAML configuration file."""
         with open(file_path, "r") as file:
             return yaml.safe_load(file)
 
     def save_config(self, file_path):
-        """Save the current configuration to a YAML file."""
         with open(file_path, "w") as file:
             yaml.dump(self.config, file, default_flow_style=False)
 
-    def save_edits(self, config_file, *inputs):
+    def save_edits(self,*args):
+        args_list = list(args)
+        config_file = args_list[0]
+        properties_values = args_list[1:]
+        keys_list = list(properties.keys())
+
         try:
-            config = yaml.safe_load(config_file)
-            updated_config = {key: value for key, value in zip(config.keys(), inputs)}
-            self.save_config("updated_config.yaml", updated_config)
-            return f"Config saved successfully: {updated_config}"
+            for key in keys_list:
+                if key not in self.config.keys():
+                    continue
+                index = keys_list.index(key)
+                self.config[key] = properties_values[index]
+            self.save_config(config_file)
+            return f"Config saved successfully: {self.config} to {config_file}", config_file
         except Exception as e:
-            return f"Error saving config: {e}"
+            return f"Error saving config: {e}", ""
 
     def add_buttons(self):
         """Add Save and Load buttons for the tab."""
         config_file = gr.File(label="Upload Config File")
         save_button = gr.Button("Save Config")
+
         save_button.click(
             self.save_edits,
-            inputs=[config_file],
-            outputs=[self.save_status]
+            inputs=[self.config_file_box, *properties.values()],
+            outputs=[self.save_status, self.config_file_box]
         )
 
         if self.allow_load:
@@ -64,17 +71,18 @@ class Tab:
             load_button = gr.Button("Load Config")
             load_button.click(
                 render_editor, 
-                inputs=[config_file, *properties.values()], 
-                outputs=[self.save_status, *properties.values()]
+                inputs=[config_file, self.config_file_box, *properties.values()], 
+                outputs=[self.save_status, self.config_file_box, *properties.values()]
             )
 
     def update_values(self, config):
         for key, value in config.items():
-            self.properties[key] = value
+            properties[key] = value
 
     def update_form(self, config):
         inputs = dict()
         for key, value in config.items():
+            value = editor_factory.get_default_value_for_key(key) or value
             if isinstance(value, bool):
                 inputs[key] = (gr.Checkbox(value=value, label=key))
             elif isinstance(value, int):
@@ -83,20 +91,28 @@ class Tab:
                 inputs[key] = (gr.Number(value=value, label=key))
             elif isinstance(value, str):
                 inputs[key] = (gr.Textbox(value=value, label=key))
+            elif isinstance(value, list):
+                inputs[key] = (gr.Dropdown(value=value[0], label=key, choices=value))
             else:
                 inputs[key] = (gr.Textbox(value=str(value), label=key))  # Default to text for unsupported types
+            
         return inputs
-
+    
 def render_editor(*args):
-    inputs = list(args)
+    args_list = list(args)
+    config_file = args_list[0]
+    config_file_box = args_list[1]
+    properties_values = args_list[2:]
     try:
-        with open(inputs[0], "r") as file:
+        with open(config_file, "r") as file:
             new_config = yaml.safe_load(file)
+            
         props_list = list(properties.keys())
         for key, value in new_config.items():
-            index = props_list.index(key) + 1
-            inputs[index] = value
+            index = props_list.index(key)
+            properties_values[index] = value
+            properties[key].value = value
             global_config.set(key, value)
-        return ["Config loaded. Edit below:", *inputs[1:]]
+        return ["Config loaded. Edit below:", config_file, *properties_values]
     except Exception as e:
-        return [f"Error loading config: {e}", *inputs[1:]]
+        return [f"Error loading config: {e}", config_file_box, *properties_values]

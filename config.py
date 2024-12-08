@@ -8,7 +8,6 @@ class Config:
 
     def set(self, key: str, value):
         self.config[key] = value
-        print(f'set {key}, {value}')
 
     def remove(self, key: str):
         self.config[key] = None
