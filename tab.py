@@ -1,15 +1,14 @@
 from typing import OrderedDict
 import gradio as gr
 import yaml
-
-from config import global_config
 import editor_factory
 
 properties = OrderedDict()
 class Tab:
+
+    
     def __init__(self, title, config_file_path, allow_load=False):
         self.title = title
-        #self.config_file_path = config_file_path
         self.allow_load = allow_load
         gr.Markdown(title)
     
@@ -18,8 +17,6 @@ class Tab:
         self.save_status = gr.Markdown()
         try:
             self.config = self.load_config(config_file_path)
-            for key, value in self.config.items():
-                global_config.set(key, value)
             with self.config_inputs:
                 self.components = OrderedDict(self.update_form(self.config))
                 for i in range(len(self.config_inputs.children)):
@@ -28,7 +25,9 @@ class Tab:
         except Exception as e:
             gr.Error(f"Error loading config file: {e}")
         self.config_file_box = gr.Textbox(value=config_file_path, label="Config file")
-        self.add_buttons()
+        with gr.Row(equal_height=False):
+            self.add_buttons()
+
 
     def load_config(self, file_path):
         with open(file_path, "r") as file:
@@ -49,7 +48,8 @@ class Tab:
                 if key not in self.config.keys():
                     continue
                 index = keys_list.index(key)
-                self.config[key] = properties_values[index]
+                value = properties_values[index]
+                self.config[key] = value if value else False
             self.save_config(config_file)
             return f"Config saved successfully: {self.config} to {config_file}", config_file
         except Exception as e:
@@ -57,7 +57,8 @@ class Tab:
 
     def add_buttons(self):
         """Add Save and Load buttons for the tab."""
-        config_file = gr.File(label="Upload Config File")
+        if self.allow_load:
+            config_file = gr.File(label="Upload Config File")
         save_button = gr.Button("Save Config")
 
         save_button.click(
@@ -67,7 +68,6 @@ class Tab:
         )
 
         if self.allow_load:
-            
             load_button = gr.Button("Load Config")
             load_button.click(
                 render_editor, 
@@ -75,14 +75,10 @@ class Tab:
                 outputs=[self.save_status, self.config_file_box, *properties.values()]
             )
 
-    def update_values(self, config):
-        for key, value in config.items():
-            properties[key] = value
-
     def update_form(self, config):
         inputs = dict()
         for key, value in config.items():
-            value = editor_factory.get_default_value_for_key(key) or value
+            value = value or editor_factory.get_default_value_for_key(key)
             if isinstance(value, bool):
                 inputs[key] = (gr.Checkbox(value=value, label=key))
             elif isinstance(value, int):
@@ -112,7 +108,6 @@ def render_editor(*args):
             index = props_list.index(key)
             properties_values[index] = value
             properties[key].value = value
-            global_config.set(key, value)
-        return ["Config loaded. Edit below:", config_file, *properties_values]
+        return ["Config loaded. Edit below:", config_file_box, *properties_values]
     except Exception as e:
         return [f"Error loading config: {e}", config_file_box, *properties_values]
