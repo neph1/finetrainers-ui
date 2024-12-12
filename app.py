@@ -3,7 +3,9 @@ import gradio as gr
 
 from config import global_config
 from runner import RunCogVideoX, RunPrepareDataset
-from tab import Tab, properties
+from tabs.general_tab import GeneralTab
+from tabs.tab import Tab
+from tabs.training_tab import TrainingTab
 
 
 class App:
@@ -25,26 +27,26 @@ class App:
 
 
             with gr.Tab("General Settings"):
-                self.tabs['general'] = Tab("General Settings", os.path.join(self.configs_path, "editor.yaml"))
+                self.tabs['general'] = GeneralTab("General Settings", os.path.join(self.configs_path, "editor.yaml"))
             runtime_tab = gr.Tab("Runtime Settings")
             prepare_tab = gr.Tab("Prepare dataset")
             output_box = gr.Textbox(value="", label="Output")
             
             with runtime_tab:
-                self.tabs['runtime'] = Tab("Runtime Settings", os.path.join(self.configs_path, "config_template.yaml"), allow_load=True)
-                run_button = gr.Button("Run Training", key='run_cogvideox')
-                run_button.click(run_cogvideox, 
-                                inputs=[*properties.values()],
-                                outputs=[output_box]
-                                )
+                self.tabs['runtime'] = TrainingTab("Training Settings", os.path.join(self.configs_path, "config_template.yaml"), allow_load=True)
+                # run_button = gr.Button("Run Training", key='run_cogvideox')
+                # run_button.click(run_cogvideox, 
+                #                 inputs=[*self.tabs['runtime'].get_properties().values()],
+                #                 outputs=[output_box]
+                #                 )
 
-            with prepare_tab:
-                self.tabs['prepare'] = Tab("Prepare dataset", os.path.join(self.configs_path, "prepare_template.yaml"), allow_load=True)
-                run_button = gr.Button("Prepare dataset", key='prepare_dataset')
-                run_button.click(run_prepare_data, 
-                                inputs=[*properties.values()],
-                                outputs=[output_box]
-                                )
+            # with prepare_tab:
+            #     self.tabs['prepare'] = Tab("Prepare dataset", os.path.join(self.configs_path, "prepare_template.yaml"), allow_load=True)
+            #     run_button = gr.Button("Prepare dataset", key='prepare_dataset')
+            #     run_button.click(run_prepare_data, 
+            #                     inputs=[*properties.values()],
+            #                     outputs=[output_box]
+            #                     )
             
         demo.launch()
 
