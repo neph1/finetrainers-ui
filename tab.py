@@ -78,7 +78,6 @@ class Tab:
     def update_form(self, config):
         inputs = dict()
         for key, value in config.items():
-            value = value or editor_factory.get_default_value_for_key(key)
             if isinstance(value, bool):
                 inputs[key] = (gr.Checkbox(value=value, label=key))
             elif isinstance(value, int):
@@ -90,7 +89,7 @@ class Tab:
             elif isinstance(value, list):
                 inputs[key] = (gr.Dropdown(value=value[0], label=key, choices=value))
             else:
-                inputs[key] = (gr.Textbox(value=str(value), label=key))  # Default to text for unsupported types
+                inputs[key] = (gr.Textbox(value=str(value), label=key))
             
         return inputs
     
