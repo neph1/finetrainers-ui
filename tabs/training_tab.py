@@ -2,7 +2,7 @@
 import os
 import gradio as gr
 from typing import OrderedDict
-from config import global_config
+from config import Config, global_config
 
 import yaml
 from runner import RunCogVideoX
@@ -42,15 +42,16 @@ class TrainingTab(Tab):
     def run_cogvideox(self, *args):
         properties_values = list(args)
         keys_list = list(properties.keys())
-        #global_config.set('path_to_cogvideox_factory', general_tab.properties['path_to_cogvideox_factory'])
+        general_properties = general_tab.properties
+        
+        config  = Config()
         for index in range(len(properties_values)):
             key = keys_list[index]
             properties[key].value = properties_values[index]
-            global_config.set(key, properties_values[index], 'train_cogvideox')
-        output_path = os.path.join(global_config.get('output_dir', 'train'), "config")
+            config.set(key, properties_values[index])
+        output_path = os.path.join(properties['output_dir'].value, "config")
         os.makedirs(output_path, exist_ok=True)
-        #self.tabs['runtime'].save_config(os.path.join(output_path, "runtime_config.yaml"))
-        result = RunCogVideoX().run_cogvideox(global_config)
+        result = RunCogVideoX().run_cogvideox(config, general_tab.properties['path_to_cogvideox_factory'].value)
         if result.returncode == 0:
             return "Run Training: Training completed successfully"
         else:

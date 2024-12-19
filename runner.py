@@ -4,16 +4,12 @@ from config import Config, global_config
 
 class RunCogVideoX:
 
-    def run_cogvideox(self, settings: Config):
+    def run_cogvideox(self, settings: Config, cogvideox_factory_path: str):
         
-        assert settings.get_cogvideox_factory_path()
-        cmd = f"accelerate launch --config_file {settings.get_cogvideox_factory_path()}/accelerate_configs/{settings.get('accelerate_config', 'train')} --gpu_ids {settings.get('gpu_ids', 'train')}  {settings.get_cogvideox_factory_path()}/training/{settings.get('training_type', 'train')}.py "
+        cmd = f"accelerate launch --config_file {cogvideox_factory_path}/accelerate_configs/{settings.get('accelerate_config')} --gpu_ids {settings.get('gpu_ids')}  {cogvideox_factory_path}/training/cogvideox/{settings.get('training_type')}.py "
         for key, value in settings.get_all():
-            if 'train_' not in key:
+            if key in ["accelerate_config", "training_type", "gpu_ids", "path_to_cogvideox_factory"]:
                 continue
-            if key in ["train_accelerate_config", "train_training_type", "train_gpu_ids", "path_to_cogvideox_factory"]:
-                continue
-            key = key.replace('train_', '', 1)
             if not value:
                 continue
             if value is False:

@@ -18,7 +18,7 @@ class Config:
     def get_cogvideox_factory_path(self) -> str:
         return self.config.get('path_to_cogvideox_factory')
     
-    def get_all(self) -> OrderedDict.items:
+    def get_all(self, context: str = '') -> OrderedDict.items:
         return self.config.items()
     
 
