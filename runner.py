@@ -1,6 +1,6 @@
 import subprocess
 
-from config import Config, global_config
+from config import Config
 
 class RunCogVideoX:
 
@@ -24,25 +24,25 @@ class RunCogVideoX:
 
 class RunPrepareDataset:
     
-    def run(self, settings: Config):
+    def run(self, settings: Config, cogvideox_factory_path: str):
         
-        cmd = f"torchrun --nproc_per_node={settings.get('nproc_per_node', 'prepare')} {settings.get_cogvideox_factory_path()}/training/prepare_dataset.py \
-      --model_id {settings.get('model_id', 'prepare')} \
-      --data_root {settings.get('data_root', 'prepare')} \
-      --caption_column  {settings.get('caption_column', 'prepare')} \
-      --video_column {settings.get('video_column', 'prepare')} \
-      --output_dir {settings.get('output_dir', 'prepare')} \
-      --height_buckets {settings.get('height_buckets', 'prepare')} \
-      --width_buckets {settings.get('width_buckets', 'prepare')} \
-      --frame_buckets {settings.get('frame_buckets', 'prepare')} \
-      --max_num_frames {settings.get('max_num_frames', 'prepare')} \
-      --max_sequence_length {settings.get('max_sequence_length', 'prepare')} \
-      --target_fps {settings.get('target_fps', 'prepare')} \
-      --batch_size {settings.get('batch_size', 'prepare')} "
+        cmd = f"torchrun --nproc_per_node={settings.get('nproc_per_node')} {cogvideox_factory_path}/training/cogvideox/prepare_dataset.py \
+      --model_id {settings.get('model_id')} \
+      --data_root {settings.get('data_root')} \
+      --caption_column  {settings.get('caption_column')} \
+      --video_column {settings.get('video_column')} \
+      --output_dir {settings.get('output_dir')} \
+      --height_buckets {settings.get('height_buckets')} \
+      --width_buckets {settings.get('width_buckets')} \
+      --frame_buckets {settings.get('frame_buckets')} \
+      --max_num_frames {settings.get('max_num_frames')} \
+      --max_sequence_length {settings.get('max_sequence_length')} \
+      --target_fps {settings.get('target_fps')} \
+      --batch_size {settings.get('batch_size')} "
         
-        if settings.get('save_latents_and_embeddings', 'prepare') == True:
+        if settings.get('save_latents_and_embeddings') == True:
             cmd += f"--save_latents_and_embeddings "
-        if settings.get('save_image_latents', 'prepare') == True:
+        if settings.get('save_image_latents') == True:
             cmd += f"--save_image_latents "
 
         print(cmd)

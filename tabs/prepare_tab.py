@@ -1,16 +1,17 @@
 
+
 import os
 import gradio as gr
-from typing import OrderedDict
-from config import Config, global_config
 
-from runner import RunCogVideoX
+from typing import OrderedDict
+from config import Config
+from runner import RunPrepareDataset
 from tabs import general_tab
 from tabs.tab import Tab
 
 properties = OrderedDict()
 
-class TrainingTab(Tab):
+class PrepareDatasetTab(Tab):
 
     def __init__(self, title, config_file_path, allow_load=False):
         super().__init__(title, config_file_path, allow_load)
@@ -29,8 +30,9 @@ class TrainingTab(Tab):
             self.add_buttons()
 
         self.output_box = gr.Textbox(value="", label="Output")
-        run_button = gr.Button("Run Training", key='run_cogvideox')
-        run_button.click(self.run_cogvideox, 
+
+        run_button = gr.Button("Prepare dataset", key='prepare_dataset')
+        run_button.click(self.run_prepare_data, 
                         inputs=[*properties.values()],
                         outputs=[self.output_box]
                         )
@@ -38,7 +40,7 @@ class TrainingTab(Tab):
     def get_properties(self) -> OrderedDict:
         return properties
     
-    def run_cogvideox(self, *args):
+    def run_prepare_data(self, *args):
         properties_values = list(args)
         keys_list = list(properties.keys())
         
@@ -49,9 +51,8 @@ class TrainingTab(Tab):
             config.set(key, properties_values[index])
         output_path = os.path.join(properties['output_dir'].value, "config")
         os.makedirs(output_path, exist_ok=True)
-        result = RunCogVideoX().run_cogvideox(config, general_tab.properties['path_to_cogvideox_factory'].value)
+        result = RunPrepareDataset().run(config, general_tab.properties['path_to_cogvideox_factory'].value)
         if result.returncode == 0:
-            return "Run Training: Training completed successfully"
+            return "Prepate dataset: Dataset prepared successfully"
         else:
-            return "Run Training: Training failed"
-    
+            return "Prepate dataset: Dataset preparation failed"
