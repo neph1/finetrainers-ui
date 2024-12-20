@@ -1,16 +1,16 @@
-prepare_batch_size: 1
-prepare_caption_column: prompt.txt
-prepare_data_root: ./
-prepare_dtype: fp16
-prepare_frame_buckets: 32 48
-prepare_height_buckets: 384 480
-prepare_max_num_frames: 48
-prepare_max_sequence_length: 226
-prepare_model_id: ' '
-prepare_nproc_per_node: 1
-prepare_output_dir: ' '
-prepare_save_image_latents: false
-prepare_save_latents_and_embeddings: false
-prepare_target_fps: 8
-prepare_video_column: videos.txt
-prepare_width_buckets: 560 720
+batch_size: 1
+caption_column: prompt.txt
+data_root: ./
+dtype: fp16
+frame_buckets: 32 48
+height_buckets: 384 480
+max_num_frames: 48
+max_sequence_length: 226
+model_id: ' '
+nproc_per_node: 1
+output_dir: ' '
+save_image_latents: false
+save_latents_and_embeddings: false
+target_fps: 8
+video_column: videos.txt
+width_buckets: 560 720
