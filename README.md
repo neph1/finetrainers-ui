@@ -7,7 +7,8 @@ Doesn't contain cogvideox-factory. You must download it and get it running separ
 
 Load and save configurations
 
-Copies the config to the output folder for easy look up later
+Finetuning and Prepare dataset tabs
+
 
 
 Usage:
