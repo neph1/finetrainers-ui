@@ -53,7 +53,8 @@ class TrainingTab(Tab):
         output_path = os.path.join(properties['output_dir'].value, "config")
         os.makedirs(output_path, exist_ok=True)
         self.save_edits(os.path.join(output_path, f"config_{datetime.datetime.now()}.yaml"), *properties_values)
-
+        if not general_tab.properties['path_to_finetrainers'].value:
+            return "Please set the path to finetrainers in General Settings"
         result = RunTrainer().run(config, general_tab.properties['path_to_finetrainers'].value)
         if isinstance(result, str):
             return result

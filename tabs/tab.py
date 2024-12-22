@@ -49,7 +49,7 @@ class Tab(ABC):
                     continue
                 index = keys_list.index(key)
                 value = properties_values[index]
-                self.config[key] = value if value else False
+                self.config[key] = value if value is not False else ''
             self.save_config(config_file)
             return f"Config saved successfully: {self.config} to {config_file}", config_file
         except Exception as e:

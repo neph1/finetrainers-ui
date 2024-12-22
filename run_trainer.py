@@ -68,7 +68,7 @@ class RunTrainer:
         --nccl_timeout {config.get('nccl_timeout')} \
         --report_to {config.get('report_to')}"
 
-        cmd = f"accelerate launch --config_file {config.get('accelerate_config_file')} --gpu_ids {config.get('gpu_ids')} {finetrainers_path}/train.py \
+        cmd = f"accelerate launch --config_file {finetrainers_path}/accelerate_configs/{config.get('accelerate_config')} --gpu_ids {config.get('gpu_ids')} {finetrainers_path}/train.py \
         {model_cmd} \
         {dataset_cmd} \
         {dataloader_cmd} \

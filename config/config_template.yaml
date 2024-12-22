@@ -1,53 +1,48 @@
-model_name: [cogvideox, ltx, mochi]
-accelerate_config: [uncompiled_1.yaml, uncompiled_2.yaml, compiled_1.yaml, deepspeed.yaml]
+accelerate_config: uncompiled_1.yaml
 allow_tf32: true
-beta1: 0.9
-beta2: 0.95
+batch_size: '1'
+beta1: '0.9'
+beta2: '0.95'
 caption_column: prompt.txt
-caption_dropout_p: 0.05
-checkpointing_limit: 2
-checkpointing_steps: 400
+caption_dropout_p: '0.05'
+checkpointing_limit: '2'
+checkpointing_steps: '400'
 data_root: ''
-dataloader_num_workers: 0
+dataloader_num_workers: '0'
 diffusion_options: ''
 enable_slicing: true
 enable_tiling: true
 epsilon: 1e-8
-flow_resolution_shifting: 
-frame_buckets: 32
 gpu_ids: '0'
-gradient_accumulation_steps: 4
+gradient_accumulation_steps: '4'
 gradient_checkpointing: true
-height_buckets: 720
 id_token: afkx
-lr: 0.0001
-lora_alpha: 128
-lr_num_cycles: 1
+lora_alpha: '128'
+lr: '0.0001'
+lr_num_cycles: '1'
 lr_scheduler: cosine_with_restarts
-lr_warmup_steps: 400
-max_grad_norm: 1.0
-max_num_frames: 32
-max_train_steps: 1000
-mixed_precision: ['fp16', 'bf16', 'no']
-nccl_timeout: 1800
-num_validation_videos: 0
-optimizer: 
-output_dir: ./
+lr_warmup_steps: '400'
+max_grad_norm: '1.0'
+max_train_steps: '1000'
+mixed_precision: fp16
+model_name: ltx_video
+nccl_timeout: '1800'
+num_validation_videos: '0'
+optimizer: adamw
+output_dir: ''
 pin_memory: true
 pretrained_model_name_or_path: ''
-rank: 128
-report_to: 'none'
-resume_from_checkpoint: ''
-seed: 42
+rank: '128'
+report_to: none
+seed: '42'
 target_modules: to_q to_k to_v to_out.0
-tracker_name: 
-train_batch_size: 1
+tracker_name: finetrainers
+train_steps: '3000'
 training_type: lora
-validation_epochs: 0
-validation_prompts: ''
+validation_epochs: '0'
 validation_prompt_separator: ':::'
-validation_steps: 100
+validation_prompts: ''
+validation_steps: '100'
 video_column: videos.txt
 video_resolution_buckets: 17x512x768 49x512x768 61x512x768 129x512x768
-weight_decay: 0.001
-width_buckets: 480
+weight_decay: '0.001'
