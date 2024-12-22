@@ -1,0 +1,43 @@
+accelerate_config: uncompiled_1.yaml
+allow_tf32: true
+beta1: 0.9
+beta2: 0.95
+caption_column: prompt.txt
+checkpointing_steps: 400
+data_root: ''
+dataloader_num_workers: 6
+enable_slicing: true
+enable_tiling: true
+frame_buckets: 32
+gpu_ids: '0'
+gradient_accumulation_steps: 4
+gradient_checkpointing: true
+height_buckets: 720
+id_token: LORA_NAME
+learning_rate: 0.0001
+lora_alpha: 128
+lr_num_cycles: 1
+lr_scheduler: cosine_with_restarts
+lr_warmup_steps: 400
+max_grad_norm: 1.0
+max_num_frames: 32
+max_train_steps: 1000
+mixed_precision: 
+nccl_timeout: 1800
+num_validation_videos: 0
+optimizer: 
+output_dir: ./
+pin_memory: true
+pretrained_model_name_or_path: ''
+rank: 128
+resume_from_checkpoint: ''
+seed: 42
+train_batch_size: 1
+training_type: 
+#use_learned_positional_embeddings: true
+validation_epochs: 0
+validation_prompt: ''
+validation_prompt_separator: ':::'
+video_column: videos.txt
+weight_decay: 0.001
+width_buckets: 480

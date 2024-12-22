@@ -1,18 +1,16 @@
 
-import datetime
 import os
 import gradio as gr
 from typing import OrderedDict
 from config import Config, global_config
 
-from run_trainer import RunTrainer
 from runner import RunCogVideoX
 from tabs import general_tab
 from tabs.tab import Tab
 
 properties = OrderedDict()
 
-class TrainingTab(Tab):
+class LegacyTrainingTab(Tab):
 
     def __init__(self, title, config_file_path, allow_load=False):
         super().__init__(title, config_file_path, allow_load)
@@ -31,8 +29,8 @@ class TrainingTab(Tab):
             self.add_buttons()
 
         self.output_box = gr.Textbox(value="", label="Output")
-        run_button = gr.Button("Start Training", key='run_trainer')
-        run_button.click(self.run_trainer, 
+        run_button = gr.Button("Run Training", key='run_cogvideox')
+        run_button.click(self.run_cogvideox, 
                         inputs=[*properties.values()],
                         outputs=[self.output_box]
                         )
@@ -40,7 +38,7 @@ class TrainingTab(Tab):
     def get_properties(self) -> OrderedDict:
         return properties
     
-    def run_trainer(self, *args):
+    def run_cogvideox(self, *args):
         properties_values = list(args)
         keys_list = list(properties.keys())
         
@@ -49,16 +47,12 @@ class TrainingTab(Tab):
             key = keys_list[index]
             properties[key].value = properties_values[index]
             config.set(key, properties_values[index])
-
         output_path = os.path.join(properties['output_dir'].value, "config")
         os.makedirs(output_path, exist_ok=True)
-        self.save_edits(os.path.join(output_path, f"config_{datetime.datetime.now()}.yaml"), *properties_values)
-        if not general_tab.properties['path_to_finetrainers'].value:
-            return "Please set the path to finetrainers in General Settings"
-        result = RunTrainer().run(config, general_tab.properties['path_to_finetrainers'].value)
-        if isinstance(result, str):
-            return result
+        self.save_config(output_path)
+        result = RunCogVideoX().run_cogvideox(config, general_tab.properties['path_to_finetrainers'].value)
         if result.returncode == 0:
             return "Run Training: Training completed successfully"
-        return "Run Training: Training failed"
+        else:
+            return "Run Training: Training failed"
     

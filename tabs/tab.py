@@ -42,14 +42,14 @@ class Tab(ABC):
         properties_values = args_list[1:]
         properties = self.get_properties()
         keys_list = list(properties.keys())
-
         try:
+
             for key in keys_list:
                 if key not in self.config.keys():
                     continue
                 index = keys_list.index(key)
                 value = properties_values[index]
-                self.config[key] = value if value else False
+                self.config[key] = value if value is not False else ''
             self.save_config(config_file)
             return f"Config saved successfully: {self.config} to {config_file}", config_file
         except Exception as e:
@@ -78,7 +78,6 @@ class Tab(ABC):
     def update_form(self, config):
         inputs = dict()
         for key, value in config.items():
-            value = value or editor_factory.get_default_value_for_key(key)
             if isinstance(value, bool):
                 inputs[key] = (gr.Checkbox(value=value, label=key))
             elif isinstance(value, str):
@@ -86,7 +85,7 @@ class Tab(ABC):
             elif isinstance(value, list):
                 inputs[key] = (gr.Dropdown(value=value[0], label=key, choices=value))
             else:
-                inputs[key] = (gr.Textbox(value=str(value), label=key))  # Default to text for unsupported types
+                inputs[key] = (gr.Textbox(value=str(value), label=key))
             
         return inputs
     
