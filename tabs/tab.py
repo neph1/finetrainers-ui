@@ -42,8 +42,8 @@ class Tab(ABC):
         properties_values = args_list[1:]
         properties = self.get_properties()
         keys_list = list(properties.keys())
-
         try:
+
             for key in keys_list:
                 if key not in self.config.keys():
                     continue

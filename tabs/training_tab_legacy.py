@@ -49,7 +49,8 @@ class LegacyTrainingTab(Tab):
             config.set(key, properties_values[index])
         output_path = os.path.join(properties['output_dir'].value, "config")
         os.makedirs(output_path, exist_ok=True)
-        result = RunCogVideoX().run_cogvideox(config, general_tab.properties['path_to_cogvideox_factory'].value)
+        self.save_config(output_path)
+        result = RunCogVideoX().run_cogvideox(config, general_tab.properties['path_to_finetrainers'].value)
         if result.returncode == 0:
             return "Run Training: Training completed successfully"
         else:

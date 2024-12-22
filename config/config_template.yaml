@@ -1,4 +1,4 @@
-model_name: [cogvideox, ltx]
+model_name: [cogvideox, ltx, mochi]
 accelerate_config: [uncompiled_1.yaml, uncompiled_2.yaml, compiled_1.yaml, deepspeed.yaml]
 allow_tf32: true
 beta1: 0.9

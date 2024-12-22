@@ -1,4 +1,5 @@
 
+import datetime
 import os
 import gradio as gr
 from typing import OrderedDict
@@ -48,9 +49,12 @@ class TrainingTab(Tab):
             key = keys_list[index]
             properties[key].value = properties_values[index]
             config.set(key, properties_values[index])
+
         output_path = os.path.join(properties['output_dir'].value, "config")
         os.makedirs(output_path, exist_ok=True)
-        result = RunTrainer().run(config, general_tab.properties['path_to_cogvideox_factory'].value)
+        self.save_edits(os.path.join(output_path, f"config_{datetime.datetime.now()}.yaml"), *properties_values)
+
+        result = RunTrainer().run(config, general_tab.properties['path_to_finetrainers'].value)
         if isinstance(result, str):
             return result
         if result.returncode == 0:

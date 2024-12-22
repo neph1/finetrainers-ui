@@ -28,9 +28,9 @@ class App:
 
             with gr.Tab("General Settings"):
                 self.tabs['general'] = GeneralTab("General Settings", os.path.join(self.configs_path, "editor.yaml"))
-            runtime_tab = gr.Tab("Runtime Settings")
-            runtime_tab_legacy = gr.Tab("Runtime Settings")
+            runtime_tab = gr.Tab("Trainer Settings")
             prepare_tab = gr.Tab("Prepare dataset")
+            runtime_tab_legacy = gr.Tab("Legacy Training Settings")
 
             with runtime_tab:
                 self.tabs['runtime'] = TrainingTab("Trainer Settings", os.path.join(self.configs_path, "config_template.yaml"), allow_load=True)

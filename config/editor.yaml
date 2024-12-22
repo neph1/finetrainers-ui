@@ -1,2 +1,2 @@
-path_to_cogvideox_factory: ''
+path_to_finetrainers: ''
 model_type: [cogvideox, mochi-1, ltx]

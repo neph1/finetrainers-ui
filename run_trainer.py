@@ -6,8 +6,8 @@ from config import Config
 
 class RunTrainer:
 
-    def run(self, config: Config, cogvideox_factory_path: str):
-        assert cogvideox_factory_path, "Path to cogvideox factory is required"
+    def run(self, config: Config, finetrainers_path: str):
+        assert finetrainers_path, "Path to finetrainers is required"
         assert config.get('data_root'), "Data root required"
         assert config.get('pretrained_model_name_or_path'), "pretrained_model_name_or_path required"
 
@@ -68,7 +68,7 @@ class RunTrainer:
         --nccl_timeout {config.get('nccl_timeout')} \
         --report_to {config.get('report_to')}"
 
-        cmd = f"accelerate launch --config_file {config.get('accelerate_config_file')} --gpu_ids {config.get('gpu_ids')} {cogvideox_factory_path}/train.py \
+        cmd = f"accelerate launch --config_file {config.get('accelerate_config_file')} --gpu_ids {config.get('gpu_ids')} {finetrainers_path}/train.py \
         {model_cmd} \
         {dataset_cmd} \
         {dataloader_cmd} \
@@ -79,4 +79,4 @@ class RunTrainer:
         {miscellaneous_cmd}"
 
         print(cmd)
-        #return subprocess.run(cmd, shell=True)
+        return subprocess.run(cmd, shell=True)
