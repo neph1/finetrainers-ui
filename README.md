@@ -9,11 +9,13 @@ Load and save configurations
 
 Finetuning and Prepare dataset tabs
 
+I'm migrating to the new finetrainers structure. Currently tested with LTX-Video. Keeping legacy CogVideoX trainer in the "Legacy" tab.
+
 
 
 Usage:
 
-Have CogvideoX-Factory
+Have ~~CogvideoX-Factory~~ finetrainers
 
 Clone repo
 
