@@ -6,7 +6,6 @@ from typing import OrderedDict
 from config import Config, global_config
 
 from run_trainer import RunTrainer
-from runner import RunCogVideoX
 from tabs import general_tab
 from tabs.tab import Tab
 
@@ -41,10 +40,11 @@ class TrainingTab(Tab):
         return properties
     
     def run_trainer(self, *args):
+        time = datetime.datetime.now()
         properties_values = list(args)
         keys_list = list(properties.keys())
         
-        config  = Config()
+        config = Config()
         for index in range(len(properties_values)):
             key = keys_list[index]
             properties[key].value = properties_values[index]
@@ -52,10 +52,13 @@ class TrainingTab(Tab):
 
         output_path = os.path.join(properties['output_dir'].value, "config")
         os.makedirs(output_path, exist_ok=True)
-        self.save_edits(os.path.join(output_path, f"config_{datetime.datetime.now()}.yaml"), *properties_values)
+        self.save_edits(os.path.join(output_path, "config_{}.yaml".format(time)), *properties_values)
+
+        log_file = os.path.join(output_path, "log_{}.txt".format(time))
+
         if not general_tab.properties['path_to_finetrainers'].value:
             return "Please set the path to finetrainers in General Settings"
-        result = RunTrainer().run(config, general_tab.properties['path_to_finetrainers'].value)
+        result = RunTrainer().run(config, general_tab.properties['path_to_finetrainers'].value, log_file)
         if isinstance(result, str):
             return result
         if result.returncode == 0:
