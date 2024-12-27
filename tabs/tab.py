@@ -14,13 +14,6 @@ class Tab(ABC):
         self.status = gr.Markdown()
         self.config_inputs = gr.Column("Settings")
         self.save_status = gr.Markdown()
-        # try:
-        #     self.config = self.load_config(config_file_path)
-        #     with self.config_inputs:
-        #         self.components = OrderedDict(self.update_form(self.config))
-        #     print("config_inputs", self.config_inputs.children)
-        # except Exception as e:
-        #     gr.Error(f"Error loading config file: {e}")
         self.config_file_box = gr.Textbox(value=config_file_path, label="Config file")
 
         try:
@@ -82,6 +75,10 @@ class Tab(ABC):
                 inputs[key] = (gr.Checkbox(value=value, label=key))
             elif isinstance(value, str):
                 inputs[key] = (gr.Textbox(value=value, label=key, interactive=True))
+            elif isinstance(value, int):
+                inputs[key] = gr.Number(label=key, default=value)
+            elif isinstance(value, float):
+                inputs[key] = gr.Number(label=key, default=value)
             elif isinstance(value, list):
                 inputs[key] = (gr.Dropdown(value=value[0], label=key, choices=value))
             else:
