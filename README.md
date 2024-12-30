@@ -1,7 +1,7 @@
 # cogvideox-factory-ui
 
 
-Simple GUI for [cogvideox-factory](https://github.com/a-r-r-o-w/cogvideox-factory) (but in no way affiliated with it) made using gradio, inspired by bmalthais gui for kohya-ss scripts.
+Simple GUI for [finetrainers](https://github.com/a-r-r-o-w/finetrainers) (but in no way affiliated with it) made using gradio, inspired by bmalthais gui for kohya-ss scripts.
 
 The goal is to be able to reproduce and analyze previous runs by saving meta data. 
 
