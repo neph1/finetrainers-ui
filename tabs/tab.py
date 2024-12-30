@@ -14,13 +14,7 @@ class Tab(ABC):
         self.status = gr.Markdown()
         self.config_inputs = gr.Column("Settings")
         self.save_status = gr.Markdown()
-        # try:
-        #     self.config = self.load_config(config_file_path)
-        #     with self.config_inputs:
-        #         self.components = OrderedDict(self.update_form(self.config))
-        #     print("config_inputs", self.config_inputs.children)
-        # except Exception as e:
-        #     gr.Error(f"Error loading config file: {e}")
+        
         self.config_file_box = gr.Textbox(value=config_file_path, label="Config file")
 
         try:

@@ -6,7 +6,6 @@ from typing import OrderedDict
 from config import Config, global_config
 
 from run_trainer import RunTrainer
-from runner import RunCogVideoX
 from tabs import general_tab
 from tabs.tab import Tab
 
@@ -32,19 +31,22 @@ class TrainingTab(Tab):
 
         self.output_box = gr.Textbox(value="", label="Output")
         run_button = gr.Button("Start Training", key='run_trainer')
+
+        log_output = gr.File(label="Log File", interactive=False)
         run_button.click(self.run_trainer, 
                         inputs=[*properties.values()],
-                        outputs=[self.output_box]
+                        outputs=[self.output_box, log_output]
                         )
 
     def get_properties(self) -> OrderedDict:
         return properties
     
     def run_trainer(self, *args):
+        time = datetime.datetime.now()
         properties_values = list(args)
         keys_list = list(properties.keys())
         
-        config  = Config()
+        config = Config()
         for index in range(len(properties_values)):
             key = keys_list[index]
             properties[key].value = properties_values[index]
@@ -52,13 +54,16 @@ class TrainingTab(Tab):
 
         output_path = os.path.join(properties['output_dir'].value, "config")
         os.makedirs(output_path, exist_ok=True)
-        self.save_edits(os.path.join(output_path, f"config_{datetime.datetime.now()}.yaml"), *properties_values)
+        self.save_edits(os.path.join(output_path, "config_{}.yaml".format(time)), *properties_values)
+
+        log_file = os.path.join(output_path, "log_{}.txt".format(time))
+
         if not general_tab.properties['path_to_finetrainers'].value:
             return "Please set the path to finetrainers in General Settings"
-        result = RunTrainer().run(config, general_tab.properties['path_to_finetrainers'].value)
+        result = RunTrainer().run(config, general_tab.properties['path_to_finetrainers'].value, log_file)
         if isinstance(result, str):
-            return result
+            return result, log_file
         if result.returncode == 0:
-            return "Run Training: Training completed successfully"
-        return "Run Training: Training failed"
+            return "Training finished. Please see the log file for more details.", log_file
+        return "Training failed. Please see the log file for more details.", log_file
     

@@ -1,8 +1,8 @@
 import os
+
 import gradio as gr
 
 from config import global_config
-from runner import RunCogVideoX, RunPrepareDataset
 from tabs.general_tab import GeneralTab
 from tabs.prepare_tab import PrepareDatasetTab
 from tabs.tab import Tab

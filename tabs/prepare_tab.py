@@ -1,6 +1,8 @@
 
 
+import datetime
 import os
+import sys
 import gradio as gr
 
 from typing import OrderedDict
@@ -41,6 +43,7 @@ class PrepareDatasetTab(Tab):
         return properties
     
     def run_prepare_data(self, *args):
+        time = datetime.datetime.now()
         properties_values = list(args)
         keys_list = list(properties.keys())
         
@@ -51,6 +54,8 @@ class PrepareDatasetTab(Tab):
             config.set(key, properties_values[index])
         output_path = os.path.join(properties['output_dir'].value, "config")
         os.makedirs(output_path, exist_ok=True)
+
+        self.save_edits(os.path.join(output_path, "config_{}.yaml".format(time)), *properties_values)
         result = RunPrepareDataset().run(config, general_tab.properties['path_to_cogvideox_factory'].value)
         if result.returncode == 0:
             return "Prepate dataset: Dataset prepared successfully"

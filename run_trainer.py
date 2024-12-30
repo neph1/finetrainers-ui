@@ -1,12 +1,11 @@
-
-
 import subprocess
-from config import Config
 
+from config import Config
 
 class RunTrainer:
 
-    def run(self, config: Config, finetrainers_path: str):
+    def run(self, config: Config, finetrainers_path: str, log_file: str):
+
         assert finetrainers_path, "Path to finetrainers is required"
         assert config.get('data_root'), "Data root required"
         assert config.get('pretrained_model_name_or_path'), "pretrained_model_name_or_path required"
@@ -79,4 +78,8 @@ class RunTrainer:
         {miscellaneous_cmd}"
 
         print(cmd)
-        return subprocess.run(cmd, shell=True)
+        with open(log_file, "w") as output_file:
+            result = subprocess.run(cmd, shell=True, stdout=output_file, stderr=output_file, text=True)
+            return result
+            
+        return "Unknown result"
