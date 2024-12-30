@@ -78,5 +78,8 @@ class RunTrainer:
         {miscellaneous_cmd}"
 
         print(cmd)
-        with open(log_file, "w") as file:
-            return subprocess.run(cmd, shell=True, stdout=file)
+        with open(log_file, "w") as output_file:
+            result = subprocess.run(cmd, shell=True, stdout=output_file, stderr=output_file, text=True)
+            return result
+            
+        return "Unknown result"

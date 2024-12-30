@@ -31,9 +31,11 @@ class TrainingTab(Tab):
 
         self.output_box = gr.Textbox(value="", label="Output")
         run_button = gr.Button("Start Training", key='run_trainer')
+
+        log_output = gr.File(label="Log File", interactive=False)
         run_button.click(self.run_trainer, 
                         inputs=[*properties.values()],
-                        outputs=[self.output_box]
+                        outputs=[self.output_box, log_output]
                         )
 
     def get_properties(self) -> OrderedDict:
@@ -60,8 +62,8 @@ class TrainingTab(Tab):
             return "Please set the path to finetrainers in General Settings"
         result = RunTrainer().run(config, general_tab.properties['path_to_finetrainers'].value, log_file)
         if isinstance(result, str):
-            return result
+            return result, log_file
         if result.returncode == 0:
-            return "Run Training: Training completed successfully"
-        return "Run Training: Training failed"
+            return "Training finished. Please see the log file for more details.", log_file
+        return "Training failed. Please see the log file for more details.", log_file
     
