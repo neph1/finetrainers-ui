@@ -54,7 +54,8 @@ class RunTrainer:
         --beta2 {config.get('beta2')} \
         --weight_decay {config.get('weight_decay')} \
         --epsilon {config.get('epsilon')} \
-        --max_grad_norm {config.get('max_grad_norm')}"
+        --max_grad_norm {config.get('max_grad_norm')} \
+        {'--use_8bit_bnb' if config.get('use_8bit_bnb') else ''}"
 
         # Validation arguments
         validation_cmd = f"--validation_prompts \"{config.get('validation_prompts')}\" \
