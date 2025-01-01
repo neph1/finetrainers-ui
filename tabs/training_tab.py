@@ -15,6 +15,7 @@ class TrainingTab(Tab):
 
     def __init__(self, title, config_file_path, allow_load=False):
         super().__init__(title, config_file_path, allow_load)
+        self.trainer = RunTrainer()
 
         try:
             with self.config_inputs:
@@ -30,13 +31,17 @@ class TrainingTab(Tab):
             self.add_buttons()
 
         self.output_box = gr.Textbox(value="", label="Output")
-        run_button = gr.Button("Start Training", key='run_trainer')
+        with gr.Row(equal_height=True):
+            run_button = gr.Button("Start Training", key='run_trainer')
+            stop_button = gr.Button("Stop", key='stop_trainer')
 
         log_output = gr.File(label="Log File", interactive=False)
         run_button.click(self.run_trainer, 
                         inputs=[*properties.values()],
                         outputs=[self.output_box, log_output]
                         )
+        
+        stop_button.click(self.stop_trainer, outputs=[self.output_box])
 
     def get_properties(self) -> OrderedDict:
         return properties
@@ -60,10 +65,13 @@ class TrainingTab(Tab):
 
         if not general_tab.properties['path_to_finetrainers'].value:
             return "Please set the path to finetrainers in General Settings"
-        result = RunTrainer().run(config, general_tab.properties['path_to_finetrainers'].value, log_file)
+        result = self.trainer.run(config, general_tab.properties['path_to_finetrainers'].value, log_file)
+        self.trainer.running = False
         if isinstance(result, str):
             return result, log_file
         if result.returncode == 0:
             return "Training finished. Please see the log file for more details.", log_file
         return "Training failed. Please see the log file for more details.", log_file
     
+    def stop_trainer(self):
+        self.trainer.stop()

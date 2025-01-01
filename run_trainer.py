@@ -1,8 +1,14 @@
 import subprocess
+import time
 
 from config import Config
 
 class RunTrainer:
+
+    def __init__(self):
+        self.running = False
+        self.process = None
+        pass
 
     def run(self, config: Config, finetrainers_path: str, log_file: str):
 
@@ -79,8 +85,19 @@ class RunTrainer:
         {miscellaneous_cmd}"
 
         print(cmd)
+        self.running = True
         with open(log_file, "w") as output_file:
-            result = subprocess.run(cmd, shell=True, stdout=output_file, stderr=output_file, text=True)
-            return result
+            self.process = subprocess.Popen(cmd, shell=True, stdout=output_file, stderr=output_file, text=True)
+            self.process.communicate()
+            return self.process
             
         return "Unknown result"
+    
+    def stop(self):
+        self.running = False
+        if self.process:
+            self.process.terminate()
+            time.sleep(3)
+            if self.process.poll() is None:
+                self.process.kill()
+        return "Training stopped"
