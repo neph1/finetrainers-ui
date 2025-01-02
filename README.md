@@ -7,9 +7,12 @@ The goal is to be able to reproduce and analyze previous runs by saving meta dat
 
 Doesn't contain cogvideox-factory. You must download it and get it running separately.
 
+I try to keep main stable, but if it fails, step back one version and try that.
+
 
 ![Screenshot from 2024-12-30 07-56-37](https://github.com/user-attachments/assets/91b947db-1e50-42e0-8d12-28b436bf837d)
 
+v0.6.0: Collapsible categories for settings
 
 v0.4.0: Saving log to output folder
 
