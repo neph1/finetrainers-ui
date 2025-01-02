@@ -1,4 +1,4 @@
-# cogvideox-factory-ui
+# finetrainers-ui
 
 
 Simple GUI for [finetrainers](https://github.com/a-r-r-o-w/finetrainers) (but in no way affiliated with it) made using gradio, inspired by bmalthais gui for kohya-ss scripts.
