@@ -17,6 +17,13 @@ class TrainingTab(Tab):
         super().__init__(title, config_file_path, allow_load)
         self.trainer = RunTrainer()
 
+        self.categories = dict()
+        try:
+            self.config_categories = self.load_config('config/config_categories.yaml')
+            
+        except Exception as e:
+            gr.Error(f"Error loading config categories file: {e}")
+
         try:
             with self.config_inputs:
                 self.components = OrderedDict(self.update_form(self.config))

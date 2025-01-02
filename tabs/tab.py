@@ -71,15 +71,28 @@ class Tab(ABC):
 
     def update_form(self, config):
         inputs = dict()
+        groups = dict()
+        
+        for category in self.config_categories.keys():
+            groups[category] = gr.Accordion(category, open=False)
+        groups['Other'] = gr.Accordion('Other', open=False)
+        
         for key, value in config.items():
-            if isinstance(value, bool):
-                inputs[key] = (gr.Checkbox(value=value, label=key))
-            elif isinstance(value, str):
-                inputs[key] = (gr.Textbox(value=value, label=key, interactive=True))
-            elif isinstance(value, list):
-                inputs[key] = (gr.Dropdown(value=value[0], label=key, choices=value))
-            else:
-                inputs[key] = (gr.Textbox(value=str(value), label=key))
+            category = 'Other'
+            for categories in self.config_categories.keys():
+                if key in self.config_categories[categories]:
+                    category = categories
+                    break
+            
+            with groups[category]:
+                if isinstance(value, bool):
+                    inputs[key] = (gr.Checkbox(value=value, label=key))
+                elif isinstance(value, str):
+                    inputs[key] = (gr.Textbox(value=value, label=key, interactive=True))
+                elif isinstance(value, list):
+                    inputs[key] = (gr.Dropdown(value=value[0], label=key, choices=value))
+                else:
+                    inputs[key] = (gr.Textbox(value=str(value), label=key))
             
         return inputs
     

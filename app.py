@@ -23,13 +23,13 @@ class App:
 
     def setup_views(self):
         with gr.Blocks() as demo:
-            gr.Markdown("### cogvideox-factory config editor")
+            gr.Markdown("### finetrainers ui")
 
 
             with gr.Tab("General Settings"):
                 self.tabs['general'] = GeneralTab("General Settings", os.path.join(self.configs_path, "editor.yaml"))
             runtime_tab = gr.Tab("Trainer Settings")
-            prepare_tab = gr.Tab("Prepare dataset")
+            prepare_tab = gr.Tab("Prepare dataset (Legacy)")
             runtime_tab_legacy = gr.Tab("Legacy Training Settings")
 
             with runtime_tab:
@@ -37,7 +37,7 @@ class App:
 
             
             with prepare_tab:
-                self.tabs['prepare'] = PrepareDatasetTab("Prepare dataset", os.path.join(self.configs_path, "prepare_template.yaml"), allow_load=True)
+                self.tabs['prepare'] = PrepareDatasetTab("Prepare dataset (Legacy)", os.path.join(self.configs_path, "prepare_template.yaml"), allow_load=True)
             
             with runtime_tab_legacy:
                 self.tabs['runtime'] = LegacyTrainingTab("Legacy CogvideoX Settings", os.path.join(self.configs_path, "config_template_legacy.yaml"), allow_load=True)
