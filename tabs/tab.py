@@ -12,11 +12,14 @@ class Tab(ABC):
         gr.Markdown(title)
     
         self.status = gr.Markdown()
-        self.config_inputs = gr.Column("Settings")
+        self.settings_column = gr.Column("Settings")
         self.save_status = gr.Markdown()
         
+        
         self.config_file_box = gr.Textbox(value=config_file_path, label="Config file")
-
+        self.groups = dict()
+        self.config_categories  = dict()
+        self.categories = dict()
         try:
             self.config = self.load_config(config_file_path)
         except Exception as e:
@@ -64,18 +67,13 @@ class Tab(ABC):
         if self.allow_load:
             load_button = gr.Button("Load Config")
             load_button.click(
-                self.render_editor, 
+                self.update_properties, 
                 inputs=[config_file, self.config_file_box, *self.get_properties().values()], 
                 outputs=[self.save_status, self.config_file_box, *self.get_properties().values()]
             )
 
     def update_form(self, config):
         inputs = dict()
-        groups = dict()
-        
-        for category in self.config_categories.keys():
-            groups[category] = gr.Accordion(category, open=False)
-        groups['Other'] = gr.Accordion('Other', open=False)
         
         for key, value in config.items():
             category = 'Other'
@@ -83,23 +81,25 @@ class Tab(ABC):
                 if key in self.config_categories[categories]:
                     category = categories
                     break
-            
-            with groups[category]:
+            with self.groups[category]:
                 if isinstance(value, bool):
                     inputs[key] = (gr.Checkbox(value=value, label=key))
                 elif isinstance(value, str):
                     inputs[key] = (gr.Textbox(value=value, label=key, interactive=True))
+                elif isinstance(value, int):
+                    inputs[key] = gr.Number(label=key, value=value)
+                elif isinstance(value, float):
+                    inputs[key] = gr.Number(label=key, value=value)
                 elif isinstance(value, list):
                     inputs[key] = (gr.Dropdown(value=value[0], label=key, choices=value))
                 else:
                     inputs[key] = (gr.Textbox(value=str(value), label=key))
-            
         return inputs
     
     def get_properties(self) -> OrderedDict:
         pass
     
-    def render_editor(self, *args):
+    def update_properties(self, *args):
         args_list = list(args)
         config_file = args_list[0]
         config_file_box = args_list[1]
