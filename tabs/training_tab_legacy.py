@@ -16,11 +16,11 @@ class LegacyTrainingTab(Tab):
         super().__init__(title, config_file_path, allow_load)
 
         try:
-            with self.config_inputs:
+            with self.settings_column:
                 self.components = OrderedDict(self.update_form(self.config))
-                for i in range(len(self.config_inputs.children)):
+                for i in range(len(self.settings_column.children)):
                     keys = list(self.components.keys())
-                    properties[keys[i]] = self.config_inputs.children[i]
+                    properties[keys[i]] = self.settings_column.children[i]
                     
         except Exception as e:
             gr.Error(f"Error loading config file: {e}")

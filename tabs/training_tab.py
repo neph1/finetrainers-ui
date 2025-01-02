@@ -18,15 +18,28 @@ class TrainingTab(Tab):
         self.trainer = RunTrainer()
 
         try:
-            with self.config_inputs:
-                self.components = OrderedDict(self.update_form(self.config))
-                for i in range(len(self.config_inputs.children)):
-                    keys = list(self.components.keys())
-                    properties[keys[i]] = self.config_inputs.children[i]
-                    
+            self.config_categories = self.load_config('config/config_categories.yaml')
+        except Exception as e:
+            gr.Error(f"Error loading config categories file: {e}")
+
+        with self.settings_column:
+            for category in self.config_categories.keys():
+                self.groups[category] = gr.Accordion(category)
+            self.groups['Other'] = gr.Accordion('Other')
+
+        try:
+            with self.settings_column:
+                inputs = self.update_form(self.config)
+                self.components = OrderedDict(inputs)
+                children = []
+                for child in self.settings_column.children:
+                    if isinstance(child, gr.Accordion):
+                        for sub_child in child.children:
+                            properties[sub_child.children[0].label] = sub_child.children[0]
+                            children.append(sub_child.children[0])
+
         except Exception as e:
             gr.Error(f"Error loading config file: {e}")
-            
         with gr.Row(equal_height=False):
             self.add_buttons()
 
