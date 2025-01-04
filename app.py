@@ -17,7 +17,7 @@ class App:
 
     def __init__(self):
         self.configs_path = "config/"
-        self.tabs = dict() # Type Tab
+        self.tabs = dict()
         self.setup_views()
 
     def setup_views(self):
