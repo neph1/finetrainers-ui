@@ -5,6 +5,7 @@ beta1: 0.9
 beta2: 0.95
 caption_column: prompts.txt
 caption_dropout_p: 0.05
+caption_dropout_technique: 'empty'
 checkpointing_limit: 102
 checkpointing_steps: 500
 data_root: ''
@@ -23,22 +24,27 @@ lr_num_cycles: 1
 lr_scheduler: ['linear', 'cosine', 'cosine_with_restarts', 'polynomial', 'constant', 'constant_with_warmup']
 lr_warmup_steps: 400
 max_grad_norm: 1.0
-mixed_precision: fp16
+mixed_precision: [bf16, fp16, 'no']
 model_name: ltx_video
 nccl_timeout: 1800
 num_validation_videos: 0
 optimizer: adamw
 output_dir: ''
 pin_memory: true
+precompute_conditions: false
 pretrained_model_name_or_path: ''
 rank: 128
 report_to: none
 seed: 42
 target_modules: to_q to_k to_v to_out.0
+text_encoder_dtype: [bf16, fp16, fp32]
+text_encoder_2_dtype: [bf16, fp16, fp32]
+text_encoder_3_dtype: [bf16, fp16, fp32]
 tracker_name: finetrainers
 train_steps: 3000
 training_type: lora
 use_8bit_bnb: false
+vae_dtype: [bf16, fp16, fp32]
 validation_epochs: 0
 validation_prompt_separator: ':::'
 validation_prompts: ''
