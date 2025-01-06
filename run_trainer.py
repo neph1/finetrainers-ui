@@ -1,3 +1,5 @@
+import os
+import signal
 import subprocess
 import time
 
@@ -26,7 +28,13 @@ class RunTrainer:
         --caption_column {config.get('caption_column')} \
         --id_token {config.get('id_token')} \
         --video_resolution_buckets {config.get('video_resolution_buckets')} \
-        --caption_dropout_p {config.get('caption_dropout_p')}"
+        --caption_dropout_p {config.get('caption_dropout_p')} \
+        --caption_dropout_technique {config.get('caption_dropout_technique')} \
+        {'--precompute_conditions' if config.get('precompute_conditions') else ''} \
+        --text_encoder_dtype {config.get('text_encoder_dtype')} \
+        --text_encoder_2_dtype {config.get('text_encoder_2_dtype')} \
+        --text_encoder_3_dtype {config.get('text_encoder_3_dtype')} \
+        --vae_dtype {config.get('vae_dtype')} "
 
         # Dataloader arguments
         dataloader_cmd = f"--dataloader_num_workers {config.get('dataloader_num_workers')}"
