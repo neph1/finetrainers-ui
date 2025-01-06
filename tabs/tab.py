@@ -2,7 +2,6 @@ from abc import ABC
 from typing import OrderedDict
 import gradio as gr
 import yaml
-import editor_factory
 
 class Tab(ABC):
 
