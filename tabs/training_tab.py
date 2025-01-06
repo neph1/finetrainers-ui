@@ -3,11 +3,12 @@ import datetime
 import os
 import gradio as gr
 from typing import OrderedDict
-from config import Config, global_config
+from config import Config
 
 from run_trainer import RunTrainer
 from tabs import general_tab
 from tabs.tab import Tab
+from trainer_config_validator import TrainerValidator
 
 properties = OrderedDict()
 
@@ -69,6 +70,13 @@ class TrainingTab(Tab):
             key = keys_list[index]
             properties[key].value = properties_values[index]
             config.set(key, properties_values[index])
+        config.set('path_to_finetrainers', general_tab.properties['path_to_finetrainers'].value)
+
+        config_validator = TrainerValidator(config)
+        try:
+            config_validator.validate()
+        except Exception as e:
+            return str(e), None
 
         output_path = os.path.join(properties['output_dir'].value, "config")
         os.makedirs(output_path, exist_ok=True)
@@ -76,9 +84,7 @@ class TrainingTab(Tab):
 
         log_file = os.path.join(output_path, "log_{}.txt".format(time))
 
-        if not general_tab.properties['path_to_finetrainers'].value:
-            return "Please set the path to finetrainers in General Settings"
-        result = self.trainer.run(config, general_tab.properties['path_to_finetrainers'].value, log_file)
+        result = self.trainer.run(config, config.get('path_to_finetrainers'), log_file)
         self.trainer.running = False
         if isinstance(result, str):
             return result, log_file
