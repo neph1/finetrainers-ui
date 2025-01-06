@@ -94,10 +94,15 @@ class RunTrainer:
         return "Unknown result"
     
     def stop(self):
-        self.running = False
-        if self.process:
-            self.process.terminate()
-            time.sleep(3)
-            if self.process.poll() is None:
-                self.process.kill()
-        return "Training stopped"
+        try:
+            self.running = False
+            if self.process:
+                self.process.terminate()
+                time.sleep(3)
+                if self.process.poll() is None:
+                    self.process.kill()
+        except Exception as e:
+            return f"Error stopping training: {e}"
+        finally:
+            self.process.wait()
+        return "Training forcibly stopped"
