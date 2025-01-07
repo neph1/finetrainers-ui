@@ -56,7 +56,10 @@ class RunTrainer:
         --checkpointing_steps {config.get('checkpointing_steps')} \
         --checkpointing_limit {config.get('checkpointing_limit')} \
         {'--enable_slicing' if config.get('enable_slicing') else ''} \
-        {'--enable_tiling' if config.get('enable_tiling') else ''}"
+        {'--enable_tiling' if config.get('enable_tiling') else ''} "
+
+        if config.get('resume_from_checkpoint'):
+            training_cmd += f"--resume_from_checkpoint {config.get('resume_from_checkpoint')}"
 
         # Optimizer arguments
         optimizer_cmd = f"--optimizer {config.get('optimizer')} \
