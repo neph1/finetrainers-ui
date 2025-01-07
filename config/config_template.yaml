@@ -35,6 +35,7 @@ precompute_conditions: false
 pretrained_model_name_or_path: ''
 rank: 128
 report_to: none
+resume_from_checkpoint: ''
 seed: 42
 target_modules: to_q to_k to_v to_out.0
 text_encoder_dtype: [bf16, fp16, fp32]

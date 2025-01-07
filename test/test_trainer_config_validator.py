@@ -2,6 +2,8 @@ import os
 import pytest
 from unittest.mock import patch
 
+import yaml
+
 from trainer_config_validator import TrainerValidator
 
 @pytest.fixture
@@ -53,6 +55,23 @@ def trainer_validator(valid_config):
 def test_valid_config(valid_config):
     trainer_validator = TrainerValidator(valid_config)
     with patch('os.path.isfile', return_value=True), patch('os.path.exists', return_value=True), patch('os.path.isdir', return_value=True):
+        trainer_validator.validate()
+
+def test_config_template():
+    config = None
+    with open('config/config_template.yaml', "r") as file:
+        config = yaml.safe_load(file)
+    config['path_to_finetrainers'] = '/path/to/finetrainers'
+    config['data_root'] = '/path/to/data'
+    config['pretrained_model_name_or_path'] = 'pretrained_model'
+    
+    trainer_validator = TrainerValidator(config)
+    with patch('os.path.isfile', return_value=True), patch('os.path.exists', return_value=True), patch('os.path.isdir', return_value=True):
+        trainer_validator.validate()
+
+def test_validate_data_root_not_set(trainer_validator):
+    trainer_validator.config['data_root'] = ''
+    with pytest.raises(ValueError, match="data_root is required"):
         trainer_validator.validate()
 
 def test_validate_data_root_invalid(trainer_validator):
