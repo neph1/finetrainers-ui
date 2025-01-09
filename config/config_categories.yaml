@@ -1,4 +1,4 @@
-Dataset: data_root, video_column, caption_column, id_token, video_resolution_buckets, caption_dropout_p
+Dataset: data_root, video_column, caption_column, dataset_file, id_token, image_resolution_buckets, video_resolution_buckets, caption_dropout_p
 Training: training_type, seed, mixed_precision, train_steps, rank, lora_alpha, target_modules, gradient_accumulation_steps, checkpointing_steps, checkpointing_limit, enable_slicing, enable_tiling, batch_size, resume_from_checkpoint
 Optimizer: optimizer, lr, beta1, beta2, epsilon, weight_decay, max_grad_norm, lr_scheduler, lr_num_cycles, lr_warmup_steps
 Validation: validation_steps, validation_epochs, num_validation_videos, validation_prompts, validation_prompt_separator

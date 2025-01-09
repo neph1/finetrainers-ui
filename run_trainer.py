@@ -28,6 +28,8 @@ class RunTrainer:
                    "--id_token", config.get('id_token'),
                    "--video_resolution_buckets"]
         dataset_cmd += config.get('video_resolution_buckets').split(' ')
+        dataset_cmd += ["--image_resolution_buckets"]
+        dataset_cmd += config.get('image_resolution_buckets').split(' ')
         dataset_cmd += ["--caption_dropout_p", config.get('caption_dropout_p'),
                    "--caption_dropout_technique", config.get('caption_dropout_technique'),
                    "--text_encoder_dtype", config.get('text_encoder_dtype'),
@@ -35,6 +37,8 @@ class RunTrainer:
                    "--text_encoder_3_dtype", config.get('text_encoder_3_dtype'),
                    "--vae_dtype", config.get('vae_dtype'),
                    '--precompute_conditions' if config.get('precompute_conditions') else '']
+        if config.get('dataset_file'):
+            dataset_cmd += ["--dataset_file", config.get('dataset_file')]
 
         dataloader_cmd = ["--dataloader_num_workers", config.get('dataloader_num_workers')]
 
@@ -56,6 +60,8 @@ class RunTrainer:
                 "--checkpointing_limit", config.get('checkpointing_limit'),
                 '--enable_slicing' if config.get('enable_slicing') else '',
                 '--enable_tiling' if config.get('enable_tiling') else '']
+        if config.get('enable_model_cpu_offload'):
+            training_cmd += ["--enable_model_cpu_offload"]
 
         if config.get('resume_from_checkpoint'):
             training_cmd += ["--resume_from_checkpoint", config.get('resume_from_checkpoint')]
