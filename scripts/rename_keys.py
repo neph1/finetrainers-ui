@@ -7,10 +7,10 @@ from scripts.common_io import load_state_dict, save_to_file
 def rename_keys(file, outfile: str)-> bool:
     sd, metadata = load_state_dict(file, torch.float32)
 
-    keys_to_normalize = [key for key in sd.keys()]
-    values_to_normalize = [sd[key].to(torch.float32) for key in keys_to_normalize]
+    keys_to_rename = [key for key in sd.keys()]
+    values = [sd[key].to(torch.float32) for key in keys_to_rename]
     new_sd = dict()
-    for key, value in zip(keys_to_normalize, values_to_normalize):
+    for key, value in zip(keys_to_rename, values):
         new_sd[key.replace("transformer.", "")] = value
         
     save_to_file(outfile, new_sd, torch.float16, metadata)

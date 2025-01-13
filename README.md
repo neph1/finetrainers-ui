@@ -12,6 +12,8 @@ I try to keep main stable, but if it fails, step back one version and try that.
 
 ![Screenshot from 2024-12-30 07-56-37](https://github.com/user-attachments/assets/91b947db-1e50-42e0-8d12-28b436bf837d)
 
+v0.9.1: Add 'resume_from_checkpoint' setting
+
 v0.9.0: Add missing precompute_condition settings
 
 v0.8.0: Configuration validator. Fail early.
