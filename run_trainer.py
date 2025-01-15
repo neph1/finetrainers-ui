@@ -29,7 +29,7 @@ class RunTrainer:
         if config.get('layerwise_upcasting_modules') != 'none':
             model_cmd +=["--layerwise_upcasting_modules", config.get('layerwise_upcasting_modules'),
             "--layerwise_upcasting_storage_dtype", config.get('layerwise_upcasting_storage_dtype'),
-            "--layerwise_upcasting_granularity", config.get('layerwise_upcasting_granularity')]
+            "--layerwise_upcasting_skip_modules_pattern", config.get('layerwise_upcasting_skip_modules_pattern')]
 
         dataset_cmd = ["--data_root", config.get('data_root'),
                    "--video_column", config.get('video_column'),
@@ -45,6 +45,7 @@ class RunTrainer:
                    "--text_encoder_2_dtype", config.get('text_encoder_2_dtype'),
                    "--text_encoder_3_dtype", config.get('text_encoder_3_dtype'),
                    "--vae_dtype", config.get('vae_dtype'),
+                   "--transformer_dtype", config.get('transformer_dtype'),
                    '--precompute_conditions' if config.get('precompute_conditions') else '']
         if config.get('dataset_file'):
             dataset_cmd += ["--dataset_file", config.get('dataset_file')]
@@ -56,7 +57,6 @@ class RunTrainer:
 
         training_cmd = ["--training_type", config.get('training_type'),
                 "--seed", config.get('seed'),
-                "--mixed_precision", config.get('mixed_precision'),
                 "--batch_size", config.get('batch_size'),
                 "--train_steps", config.get('train_steps'),
                 "--rank", config.get('rank'),

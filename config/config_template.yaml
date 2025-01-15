@@ -21,7 +21,7 @@ gradient_accumulation_steps: 4
 gradient_checkpointing: true
 id_token: afkx
 layerwise_upcasting_modules: [none, transformer]
-layerwise_upcasting_granularity: [pytorch_layer, diffusers_layer]
+layerwise_upcasting_skip_modules_pattern: 'patch_embed pos_embed x_embedder context_embedder ^proj_in$ ^proj_out$ norm'
 layerwise_upcasting_storage_dtype: [float8_e4m3fn, float8_e5m2]
 image_resolution_buckets: 512x768
 lora_alpha: 128
@@ -47,6 +47,7 @@ text_encoder_dtype: [bf16, fp16, fp32, fp8]
 text_encoder_2_dtype: [bf16, fp16, fp32, fp8]
 text_encoder_3_dtype: [bf16, fp16, fp32, fp8]
 tracker_name: finetrainers
+transformer_dtype: [bf16, fp16, fp32, fp8]
 train_steps: 3000
 training_type: lora
 use_8bit_bnb: false
