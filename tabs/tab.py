@@ -71,10 +71,10 @@ class Tab(ABC):
                 outputs=[self.save_status, self.config_file_box, *self.get_properties().values()]
             )
 
-    def update_form(self, config):
+    def update_form(self):
         inputs = dict()
         
-        for key, value in config.items():
+        for key, value in self.config.items():
             category = 'Other'
             for categories in self.config_categories.keys():
                 if key in self.config_categories[categories]:
@@ -114,6 +114,6 @@ class Tab(ABC):
                 
                 properties_values[index] = value
                 #properties[key].value = value
-            return ["Config loaded. Edit below:", config_file_box, *properties_values]
+            return ["Config loaded.", config_file_box, *properties_values]
         except Exception as e:
             return [f"Error loading config: {e}", config_file_box, *properties_values]
