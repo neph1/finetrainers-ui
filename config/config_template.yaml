@@ -43,15 +43,15 @@ report_to: none
 resume_from_checkpoint: ''
 seed: 42
 target_modules: to_q to_k to_v to_out.0
-text_encoder_dtype: [bf16, fp16, fp32, fp8]
-text_encoder_2_dtype: [bf16, fp16, fp32, fp8]
-text_encoder_3_dtype: [bf16, fp16, fp32, fp8]
+text_encoder_dtype: [bf16, fp16, fp32]
+text_encoder_2_dtype: [bf16, fp16, fp32]
+text_encoder_3_dtype: [bf16, fp16, fp32]
 tracker_name: finetrainers
-transformer_dtype: [bf16, fp16, fp32, fp8]
+transformer_dtype: [bf16, fp16, fp32]
 train_steps: 3000
 training_type: lora
 use_8bit_bnb: false
-vae_dtype: [bf16, fp16, fp32, fp8]
+vae_dtype: [bf16, fp16, fp32]
 validation_epochs: 0
 validation_prompt_separator: ':::'
 validation_prompts: ''

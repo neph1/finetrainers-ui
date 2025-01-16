@@ -114,6 +114,6 @@ class Tab(ABC):
                 
                 properties_values[index] = value
                 #properties[key].value = value
-            return ["Config loaded. Edit below:", config_file_box, *properties_values]
+            return ["Config loaded.", config_file_box, *properties_values]
         except Exception as e:
             return [f"Error loading config: {e}", config_file_box, *properties_values]
