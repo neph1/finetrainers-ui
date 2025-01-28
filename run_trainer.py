@@ -24,6 +24,7 @@ class RunTrainer:
                      "--text_encoder_dtype", config.get('text_encoder_dtype'),
                      "--text_encoder_2_dtype", config.get('text_encoder_2_dtype'),
                      "--text_encoder_3_dtype", config.get('text_encoder_3_dtype'),
+                     "--transformer_dtype", config.get('transformer_dtype'),
                      "--vae_dtype", config.get('vae_dtype')]
 
         if config.get('layerwise_upcasting_modules') != 'none':
@@ -41,18 +42,12 @@ class RunTrainer:
         dataset_cmd += config.get('image_resolution_buckets').split(' ')
         dataset_cmd += ["--caption_dropout_p", config.get('caption_dropout_p'),
                    "--caption_dropout_technique", config.get('caption_dropout_technique'),
-                   "--text_encoder_dtype", config.get('text_encoder_dtype'),
-                   "--text_encoder_2_dtype", config.get('text_encoder_2_dtype'),
-                   "--text_encoder_3_dtype", config.get('text_encoder_3_dtype'),
-                   "--vae_dtype", config.get('vae_dtype'),
-                   "--transformer_dtype", config.get('transformer_dtype'),
                    '--precompute_conditions' if config.get('precompute_conditions') else '']
         if config.get('dataset_file'):
             dataset_cmd += ["--dataset_file", config.get('dataset_file')]
 
         dataloader_cmd = ["--dataloader_num_workers", config.get('dataloader_num_workers')]
 
-        # Diffusion arguments TODO: replace later
         diffusion_cmd = [config.get('diffusion_options')]
 
         training_cmd = ["--training_type", config.get('training_type'),

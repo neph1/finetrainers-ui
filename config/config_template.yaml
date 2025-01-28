@@ -11,7 +11,7 @@ checkpointing_steps: 500
 data_root: ''
 dataloader_num_workers: 0
 dataset_file: ''
-diffusion_options: ''
+diffusion_options: '--flow_weighting_scheme logit_normal'
 enable_model_cpu_offload: false
 enable_slicing: true
 enable_tiling: true
@@ -30,7 +30,7 @@ lr_num_cycles: 1
 lr_scheduler: ['linear', 'cosine', 'cosine_with_restarts', 'polynomial', 'constant', 'constant_with_warmup']
 lr_warmup_steps: 400
 max_grad_norm: 1.0
-model_name: ltx_video
+model_name: ['ltx_video', 'hunyuan_video']
 nccl_timeout: 1800
 num_validation_videos: 0
 optimizer: adamw
