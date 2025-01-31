@@ -62,7 +62,8 @@ class TrainerValidator:
     def validate_caption_column(self):
         data_root = self.config.get('data_root')
         caption_column = self.config.get('caption_column')
-        if data_root and caption_column:
+        dataset_file = self.config.get('dataset_file')
+        if data_root and caption_column and not dataset_file:
             file_path = os.path.join(data_root, caption_column)
             if not os.path.isfile(file_path):
                 raise ValueError(f"File {caption_column} does not exist at {data_root}")
@@ -75,7 +76,8 @@ class TrainerValidator:
     def validate_video_column(self):
         data_root = self.config.get('data_root')
         video_column = self.config.get('video_column')
-        if data_root and video_column:
+        dataset_file = self.config.get('dataset_file')
+        if data_root and video_column and not dataset_file:
             file_path = os.path.join(data_root, video_column)
             if not os.path.isfile(file_path):
                 raise ValueError(f"File {video_column} does not exist at {data_root}")
