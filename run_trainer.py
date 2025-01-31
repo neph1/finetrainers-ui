@@ -44,7 +44,7 @@ class RunTrainer:
                    "--caption_dropout_technique", config.get('caption_dropout_technique'),
                    '--precompute_conditions' if config.get('precompute_conditions') else '']
         if config.get('dataset_file'):
-            dataset_cmd += ["--dataset_file", config.get('dataset_file')]
+            dataset_cmd += ["--dataset_file", f"{config.get('data_root')}/{config.get('dataset_file')}"]
 
         dataloader_cmd = ["--dataloader_num_workers", config.get('dataloader_num_workers')]
 
