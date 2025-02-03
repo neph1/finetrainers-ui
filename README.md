@@ -50,7 +50,3 @@ Cross fingers and hope it works
 Early days: May not work as expected.
 
 The editor is pretty dumb at the moment, and formatting is expected to be the same as in the .sh files, ie spaces between buckets, comma between gpu_ids.
-
-
-Tip:
-If I've missed any configuration options you want, you can add them to `configs/config_template.yaml` and they will be picked up by the app.
