@@ -2,6 +2,7 @@ import os
 
 import gradio as gr
 
+from tabs.dataset_tab import DatasetTab
 from tabs.general_tab import GeneralTab
 from tabs.prepare_tab import PrepareDatasetTab
 from tabs.tool_tab import ToolTab
@@ -28,16 +29,16 @@ class App:
             with gr.Tab("General Settings"):
                 self.tabs['general'] = GeneralTab("General Settings", os.path.join(self.configs_path, "editor.yaml"))
             runtime_tab = gr.Tab("Trainer Settings")
-            tools_tab = gr.Tab("Lora Tools")
             
             prepare_tab = gr.Tab("Prepare dataset (Legacy)")
             runtime_tab_legacy = gr.Tab("Legacy Training Settings")
+            dataset_tab = gr.Tab("Dataset")
 
             with runtime_tab:
                 self.tabs['runtime'] = TrainingTab("Trainer Settings", os.path.join(self.configs_path, "config_template.yaml"), allow_load=True)
 
-            with tools_tab:
-                self.tabs['tools'] = ToolTab()
+            with dataset_tab:
+                self.tabs['dataset'] = DatasetTab()
 
             with prepare_tab:
                 self.tabs['prepare'] = PrepareDatasetTab("Prepare dataset (Legacy)", os.path.join(self.configs_path, "prepare_template.yaml"), allow_load=True)

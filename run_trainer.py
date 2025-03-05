@@ -48,7 +48,8 @@ class RunTrainer:
 
         dataloader_cmd = ["--dataloader_num_workers", config.get('dataloader_num_workers')]
 
-        diffusion_cmd = [config.get('diffusion_options')]
+        # TODO: seems to have changed, need full options
+        #diffusion_cmd = [config.get('diffusion_options')]
 
         training_cmd = ["--training_type", config.get('training_type'),
                 "--seed", config.get('seed'),
@@ -91,7 +92,7 @@ class RunTrainer:
                      "--nccl_timeout", config.get('nccl_timeout'),
                      "--report_to", config.get('report_to')]
         accelerate_cmd = ["accelerate", "launch", "--config_file", f"{finetrainers_path}/accelerate_configs/{config.get('accelerate_config')}", "--gpu_ids", config.get('gpu_ids')]
-        cmd = accelerate_cmd + [f"{finetrainers_path}/train.py"] + model_cmd + dataset_cmd + dataloader_cmd + diffusion_cmd + training_cmd + optimizer_cmd + validation_cmd + miscellaneous_cmd
+        cmd = accelerate_cmd + [f"{finetrainers_path}/train.py"] + model_cmd + dataset_cmd + dataloader_cmd + training_cmd + optimizer_cmd + validation_cmd + miscellaneous_cmd
         fixed_cmd = []
         for i in range(len(cmd)):
             if cmd[i] != '':

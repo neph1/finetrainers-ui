@@ -30,7 +30,7 @@ lr_num_cycles: 1
 lr_scheduler: ['linear', 'cosine', 'cosine_with_restarts', 'polynomial', 'constant', 'constant_with_warmup']
 lr_warmup_steps: 400
 max_grad_norm: 1.0
-model_name: ['ltx_video', 'hunyuan_video']
+model_name: ['ltx_video', 'hunyuan_video', 'wan', 'cogvideox']
 nccl_timeout: 1800
 num_validation_videos: 0
 optimizer: adamw
@@ -49,7 +49,7 @@ text_encoder_3_dtype: [bf16, fp16, fp32]
 tracker_name: finetrainers
 transformer_dtype: [bf16, fp16, fp32]
 train_steps: 3000
-training_type: lora
+training_type: ['lora', 'full-finetune']
 use_8bit_bnb: false
 vae_dtype: [bf16, fp16, fp32]
 validation_epochs: 0
