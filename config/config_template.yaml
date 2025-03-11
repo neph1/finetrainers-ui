@@ -3,27 +3,27 @@ allow_tf32: true
 batch_size: 1
 beta1: 0.9
 beta2: 0.95
-caption_column: prompts.txt
 caption_dropout_p: 0.05
 caption_dropout_technique: 'empty'
 checkpointing_limit: 102
 checkpointing_steps: 500
-data_root: ''
+cp_degree: 1
 dataloader_num_workers: 0
-dataset_file: ''
+dataset_config: ''
 diffusion_options: '--flow_weighting_scheme logit_normal'
+dp_degree: 1
+dp_shards: 1
 enable_model_cpu_offload: false
+enable_precomputation: false
 enable_slicing: true
 enable_tiling: true
 epsilon: 1e-8
 gpu_ids: '0'
 gradient_accumulation_steps: 4
 gradient_checkpointing: true
-id_token: afkx
 layerwise_upcasting_modules: [none, transformer]
 layerwise_upcasting_skip_modules_pattern: 'patch_embed pos_embed x_embedder context_embedder ^proj_in$ ^proj_out$ norm'
 layerwise_upcasting_storage_dtype: [float8_e4m3fn, float8_e5m2]
-image_resolution_buckets: 512x768
 lora_alpha: 128
 lr: 0.0001
 lr_num_cycles: 1
@@ -32,11 +32,16 @@ lr_warmup_steps: 400
 max_grad_norm: 1.0
 model_name: ['ltx_video', 'hunyuan_video', 'wan', 'cogvideox']
 nccl_timeout: 1800
+nproc_per_node: 1
 num_validation_videos: 0
 optimizer: adamw
 output_dir: ''
+parallel_backend: ['ptd', 'accelerate']
 pin_memory: true
-precompute_conditions: false
+pp_degree: 1
+precomputation_dir: ''
+precomputation_items: 512
+precomputation_once: false
 pretrained_model_name_or_path: ''
 rank: 128
 report_to: none
@@ -46,16 +51,13 @@ target_modules: to_q to_k to_v to_out.0
 text_encoder_dtype: [bf16, fp16, fp32]
 text_encoder_2_dtype: [bf16, fp16, fp32]
 text_encoder_3_dtype: [bf16, fp16, fp32]
+tp_degree: 1
 tracker_name: finetrainers
 transformer_dtype: [bf16, fp16, fp32]
 train_steps: 3000
 training_type: ['lora', 'full-finetune']
 use_8bit_bnb: false
 vae_dtype: [bf16, fp16, fp32]
-validation_epochs: 0
-validation_prompt_separator: ':::'
-validation_prompts: ''
+validation_dataset_file: ''
 validation_steps: 100
-video_column: videos.txt
-video_resolution_buckets: 49x512x768
 weight_decay: 0.001
