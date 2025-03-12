@@ -30,9 +30,12 @@ lr_num_cycles: 1
 lr_scheduler: ['linear', 'cosine', 'cosine_with_restarts', 'polynomial', 'constant', 'constant_with_warmup']
 lr_warmup_steps: 400
 max_grad_norm: 1.0
+master_address: 'localhost'
+master_port: 0
 model_name: ['ltx_video', 'hunyuan_video', 'wan', 'cogvideox']
 nccl_timeout: 1800
 nproc_per_node: 1
+num_gpus: 1
 num_validation_videos: 0
 optimizer: adamw
 output_dir: ''

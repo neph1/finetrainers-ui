@@ -94,10 +94,17 @@ class RunTrainer:
                      "--report_to", config.get('report_to')]
         
         pre_command = ''
+        num_gpus = config.get('num_gpus')
+        address = config.get('master_address')
+        port = config.get('master_port')
         if parallel_backend == 'accelerate':
+            os.environ['WORLD_SIZE'] = f'{num_gpus}'
+            os.environ['RANK'] = config.get('gpu_ids')
+            os.environ['MASTER_ADDR'] = address
+            os.environ['MASTER_PORT'] = f'{port}'
             pre_command = ["accelerate", "launch", "--config_file", f"{finetrainers_path}/accelerate_configs/{config.get('accelerate_config')}", "--gpu_ids", config.get('gpu_ids')]
         elif parallel_backend == 'ptd':
-            pre_command = ["torchrun", "--standalone", "--nnodes=1", "--nproc_per_node", config.get('nproc_per_node'), "--rdzv_backend", "c10d", "--rdzv_endpoint", "localhost:0"]
+            pre_command = ["torchrun", "--standalone", "--nnodes", num_gpus, "--nproc_per_node", config.get('nproc_per_node'), "--rdzv_backend", "c10d", "--rdzv_endpoint", f"{address}:{port}"]
         cmd = pre_command + [f"{finetrainers_path}/train.py"] + parallel_cmd + model_cmd + dataset_cmd + dataloader_cmd + training_cmd + optimizer_cmd + validation_cmd + miscellaneous_cmd
         fixed_cmd = []
         for i in range(len(cmd)):
