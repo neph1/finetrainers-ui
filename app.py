@@ -2,7 +2,6 @@ import os
 
 import gradio as gr
 
-from tabs.dataset_tab import DatasetTab
 from tabs.general_tab import GeneralTab
 from tabs.prepare_tab import PrepareDatasetTab
 from tabs.tool_tab import ToolTab
@@ -36,9 +35,6 @@ class App:
 
             with runtime_tab:
                 self.tabs['runtime'] = TrainingTab("Trainer Settings", os.path.join(self.configs_path, "config_template.yaml"), allow_load=True)
-
-            with dataset_tab:
-                self.tabs['dataset'] = DatasetTab()
 
             with prepare_tab:
                 self.tabs['prepare'] = PrepareDatasetTab("Prepare dataset (Legacy)", os.path.join(self.configs_path, "prepare_template.yaml"), allow_load=True)
