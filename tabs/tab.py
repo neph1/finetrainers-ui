@@ -109,11 +109,15 @@ class Tab(ABC):
             props_list = list(self.get_properties().keys())
             for key, value in new_config.items():
                 
+                if key not in props_list:
+                    print(f"Key {key} not in properties list")
+                    continue
+
                 index = props_list.index(key)
                 key = props_list[index]
                 
                 properties_values[index] = value
-                #properties[key].value = value
+                #print(f"Setting {key} to {value}")
             return ["Config loaded.", config_file_box, *properties_values]
         except Exception as e:
             return [f"Error loading config: {e}", config_file_box, *properties_values]

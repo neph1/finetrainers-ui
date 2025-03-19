@@ -16,9 +16,16 @@ class RunTrainer:
     def run(self, config: Config, finetrainers_path: str, log_file: str):
 
         assert finetrainers_path, "Path to finetrainers is required"
-        assert config.get('data_root'), "Data root required"
         assert config.get('pretrained_model_name_or_path'), "pretrained_model_name_or_path required"
 
+        parallel_backend = config.get('parallel_backend')
+        parallel_cmd = ["--parallel_backend", parallel_backend,
+                            "--pp_degree", config.get('pp_degree'),
+                            "--dp_degree", config.get('dp_degree'),
+                            "--dp_shards", config.get('dp_shards'),
+                            "--cp_degree", config.get('cp_degree'),
+                            "--tp_degree", config.get('tp_degree')]
+        
         model_cmd = ["--model_name", config.get('model_name'), 
                      "--pretrained_model_name_or_path", config.get('pretrained_model_name_or_path'),
                      "--text_encoder_dtype", config.get('text_encoder_dtype'),
@@ -32,19 +39,13 @@ class RunTrainer:
             "--layerwise_upcasting_storage_dtype", config.get('layerwise_upcasting_storage_dtype'),
             "--layerwise_upcasting_skip_modules_pattern", config.get('layerwise_upcasting_skip_modules_pattern')]
 
-        dataset_cmd = ["--data_root", config.get('data_root'),
-                   "--video_column", config.get('video_column'),
-                   "--caption_column", config.get('caption_column'),
-                   "--id_token", config.get('id_token'),
-                   "--video_resolution_buckets"]
-        dataset_cmd += config.get('video_resolution_buckets').split(' ')
-        dataset_cmd += ["--image_resolution_buckets"]
-        dataset_cmd += config.get('image_resolution_buckets').split(' ')
-        dataset_cmd += ["--caption_dropout_p", config.get('caption_dropout_p'),
-                   "--caption_dropout_technique", config.get('caption_dropout_technique'),
-                   '--precompute_conditions' if config.get('precompute_conditions') else '']
-        if config.get('dataset_file'):
-            dataset_cmd += ["--dataset_file", f"{config.get('data_root')}/{config.get('dataset_file')}"]
+        dataset_cmd = ["--dataset_config", config.get('dataset_config'),
+                    "--caption_dropout_p", config.get('caption_dropout_p'),
+                    "--caption_dropout_technique", config.get('caption_dropout_technique'),
+                    "--enable_precomputation" if config.get('enable_precomputation') else '',
+                    "--precomputation_items", config.get('precomputation_items'),
+                    "--precomputation_dir" if config.get('precomputation_dir') else '',
+                    "--precomputation_once" if config.get('precomputation_once') else '']
 
         dataloader_cmd = ["--dataloader_num_workers", config.get('dataloader_num_workers')]
 
@@ -83,7 +84,7 @@ class RunTrainer:
                  "--max_grad_norm", config.get('max_grad_norm'),
                  '--use_8bit_bnb' if config.get('use_8bit_bnb') else '']
 
-        validation_cmd = ["--validation_prompts" if config.get('validation_prompts') else '', config.get('validation_prompts') or '',
+        validation_cmd = ["--validation_dataset_file" if config.get('validation_dataset_file') else '',
                   "--num_validation_videos", config.get('num_validation_videos'),
                   "--validation_steps", config.get('validation_steps')]
 
@@ -91,8 +92,20 @@ class RunTrainer:
                      "--output_dir", config.get('output_dir'),
                      "--nccl_timeout", config.get('nccl_timeout'),
                      "--report_to", config.get('report_to')]
-        accelerate_cmd = ["accelerate", "launch", "--config_file", f"{finetrainers_path}/accelerate_configs/{config.get('accelerate_config')}", "--gpu_ids", config.get('gpu_ids')]
-        cmd = accelerate_cmd + [f"{finetrainers_path}/train.py"] + model_cmd + dataset_cmd + dataloader_cmd + training_cmd + optimizer_cmd + validation_cmd + miscellaneous_cmd
+        
+        pre_command = ''
+        num_gpus = config.get('num_gpus')
+        address = config.get('master_address')
+        port = config.get('master_port')
+        if parallel_backend == 'accelerate':
+            os.environ['WORLD_SIZE'] = f'{num_gpus}'
+            os.environ['RANK'] = config.get('gpu_ids')
+            os.environ['MASTER_ADDR'] = address
+            os.environ['MASTER_PORT'] = f'{port}'
+            pre_command = ["accelerate", "launch", "--config_file", f"{finetrainers_path}/accelerate_configs/{config.get('accelerate_config')}", "--gpu_ids", config.get('gpu_ids')]
+        elif parallel_backend == 'ptd':
+            pre_command = ["torchrun", "--standalone", "--nnodes", num_gpus, "--nproc_per_node", config.get('nproc_per_node'), "--rdzv_backend", "c10d", "--rdzv_endpoint", f"{address}:{port}"]
+        cmd = pre_command + [f"{finetrainers_path}/train.py"] + parallel_cmd + model_cmd + dataset_cmd + dataloader_cmd + training_cmd + optimizer_cmd + validation_cmd + miscellaneous_cmd
         fixed_cmd = []
         for i in range(len(cmd)):
             if cmd[i] != '':
