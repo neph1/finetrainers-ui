@@ -1,6 +1,8 @@
 
 import datetime
+import time
 import os
+from threading import Thread
 import gradio as gr
 from typing import OrderedDict
 from config import Config
@@ -48,10 +50,11 @@ class TrainingTab(Tab):
         with gr.Row(equal_height=True):
             run_button = gr.Button("Start Training", key='run_trainer')
             stop_button = gr.Button("Stop", key='stop_trainer')
+            delay_box = gr.Number(value=0, label="Delay start (minutes)", minimum=0)
 
         log_output = gr.File(label="Log File", interactive=False)
         run_button.click(self.run_trainer, 
-                        inputs=[*properties.values()],
+                        inputs=[delay_box, *properties.values()],
                         outputs=[self.output_box, log_output]
                         )
         
@@ -60,8 +63,8 @@ class TrainingTab(Tab):
     def get_properties(self) -> OrderedDict:
         return properties
     
-    def run_trainer(self, *args):
-        time = datetime.datetime.now()
+    def run_trainer(self, delay, *args):
+        current_time = datetime.datetime.now()
         properties_values = list(args)
         keys_list = list(properties.keys())
         
@@ -80,17 +83,22 @@ class TrainingTab(Tab):
 
         output_path = os.path.join(properties['output_dir'].value, "config")
         os.makedirs(output_path, exist_ok=True)
-        self.save_edits(os.path.join(output_path, "config_{}.yaml".format(time)), *properties_values)
+        self.save_edits(os.path.join(output_path, "config_{}.yaml".format(current_time)), *properties_values)
 
-        log_file = os.path.join(output_path, "log_{}.txt".format(time))
+        log_file = os.path.join(output_path, "log_{}.txt".format(current_time))
 
-        result = self.trainer.run(config, config.get('path_to_finetrainers'), log_file)
-        self.trainer.running = False
-        if isinstance(result, str):
-            return result, log_file
-        if result.returncode == 0:
-            return "Training finished. Please see the log file for more details.", log_file
-        return "Training failed. Please see the log file for more details.", log_file
+        if delay:
+            time.sleep(int(delay) * 60)
+            Thread(target=self.trainer.run, args=(config, config.get('path_to_finetrainers'), log_file), daemon=True).start()
+            return "Training is running asynchronously, no result returned to gradio. Please see the log file for more details.", log_file
+        else:
+            result = self.trainer.run(config, config.get('path_to_finetrainers'), log_file)
+            self.trainer.running = False
+            if isinstance(result, str):
+                return result, log_file
+            if result.returncode == 0:
+                return "Training finished. Please see the log file for more details.", log_file
+            return "Training failed. Please see the log file for more details.", log_file
     
     def stop_trainer(self):
         self.trainer.stop()
