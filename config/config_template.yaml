@@ -54,13 +54,21 @@ target_modules: to_q to_k to_v to_out.0
 text_encoder_dtype: [bf16, fp16, fp32]
 text_encoder_2_dtype: [bf16, fp16, fp32]
 text_encoder_3_dtype: [bf16, fp16, fp32]
+text_encoder_id: ''
+text_encoder_2_id: ''
+text_encoder_3_id: ''
+tokenizer_id: ''
+tokenizer_2_id: ''
+tokenizer_3_id: ''
 tp_degree: 1
 tracker_name: finetrainers
 transformer_dtype: [bf16, fp16, fp32]
+transformer_id: ''
 train_steps: 3000
 training_type: ['lora', 'full-finetune']
 use_8bit_bnb: false
 vae_dtype: [bf16, fp16, fp32]
+vae_id: ''
 validation_dataset_file: ''
 validation_steps: 100
 weight_decay: 0.001
