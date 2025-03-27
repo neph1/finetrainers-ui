@@ -33,14 +33,22 @@ class RunTrainer:
                      "--text_encoder_3_dtype", config.get('text_encoder_3_dtype'),
                      "--transformer_dtype", config.get('transformer_dtype'),
                      "--vae_dtype", config.get('vae_dtype')]
-        model_cmd += f"--text_encoder_id {config.get('text_encoder_id')}" if config.get('text_encoder_id') else ''
-        model_cmd += f"--text_encoder_2_id {config.get('text_encoder_2_id')}" if config.get('text_encoder_2_id') else ''
-        model_cmd += f"--text_encoder_3_id {config.get('text_encoder_3_id')}" if config.get('text_encoder_3_id') else ''
-        model_cmd += f"--transformer_id {config.get('transformer_id')}" if config.get('transformer_id') else ''
-        model_cmd += f"--vae_id {config.get('vae_id')}" if config.get('vae_id') else ''
-        model_cmd += f"--tokenizer_id {config.get('tokenizer_id')}" if config.get('tokenizer_id') else ''
-        model_cmd += f"--tokenizer_2_id {config.get('tokenizer_2_id')}" if config.get('tokenizer_2_id') else ''
-        model_cmd += f"--tokenizer_3_id {config.get('tokenizer_3_id')}" if config.get('tokenizer_3_id') else ''
+        if config.get('text_encoder_id'):
+            model_cmd += ["--text_encoder_id", config.get('text_encoder_id')]
+        if config.get('text_encoder_2_id'):
+            model_cmd += ["--text_encoder_2_id", config.get('text_encoder_2_id')]
+        if config.get('text_encoder_3_id'):
+            model_cmd += ["--text_encoder_3_id", config.get('text_encoder_3_id')]
+        if config.get('transformer_id'):
+            model_cmd += ["--transformer_id", config.get('transformer_id')]
+        if config.get('vae_id'):
+            model_cmd += ["--vae_id", config.get('vae_id')]
+        if config.get('tokenizer_id'):
+            model_cmd += ["--tokenizer_id", config.get('tokenizer_id')]
+        if config.get('tokenizer_2_id'):
+            model_cmd += ["--tokenizer_2_id", config.get('tokenizer_2_id')]
+        if config.get('tokenizer_3_id'):
+            model_cmd += ["--tokenizer_3_id", config.get('tokenizer_3_id')]
 
         if config.get('layerwise_upcasting_modules') != 'none':
             model_cmd +=["--layerwise_upcasting_modules", config.get('layerwise_upcasting_modules'),
