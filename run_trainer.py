@@ -71,10 +71,7 @@ class RunTrainer:
         training_cmd = ["--training_type", config.get('training_type'),
                 "--seed", config.get('seed'),
                 "--batch_size", config.get('batch_size'),
-                "--train_steps", config.get('train_steps'),
-                "--rank", config.get('rank'),
-                "--lora_alpha", config.get('lora_alpha'),
-                "--target_modules"]
+                "--train_steps", config.get('train_steps')]
         training_cmd += config.get('target_modules').split(' ')
         training_cmd += ["--gradient_accumulation_steps", config.get('gradient_accumulation_steps'),
                 '--gradient_checkpointing' if config.get('gradient_checkpointing') else '',
@@ -103,6 +100,13 @@ class RunTrainer:
         validation_cmd = ["--validation_dataset_file" if config.get('validation_dataset_file') else '',
                   "--num_validation_videos", config.get('num_validation_videos'),
                   "--validation_steps", config.get('validation_steps')]
+        
+        control_cmd = ["--rank", config.get('rank'),
+                "--lora_alpha", config.get('lora_alpha'),
+                "--target_modules",
+                "--control_type", config.get('control_type'),
+                "--frame_conditioning_index", config.get('frame_conditioning_index'),
+                "--frame_conditioning_type", config.get('frame_conditioning_type')]
 
         miscellaneous_cmd = ["--tracker_name", config.get('tracker_name'),
                      "--output_dir", config.get('output_dir'),
@@ -121,7 +125,7 @@ class RunTrainer:
             pre_command = ["accelerate", "launch", "--config_file", f"{finetrainers_path}/accelerate_configs/{config.get('accelerate_config')}", "--gpu_ids", config.get('gpu_ids')]
         elif parallel_backend == 'ptd':
             pre_command = ["torchrun", "--standalone", "--nnodes", num_gpus, "--nproc_per_node", config.get('nproc_per_node'), "--rdzv_backend", "c10d", "--rdzv_endpoint", f"{address}:{port}"]
-        cmd = pre_command + [f"{finetrainers_path}/train.py"] + parallel_cmd + model_cmd + dataset_cmd + dataloader_cmd + training_cmd + optimizer_cmd + validation_cmd + miscellaneous_cmd
+        cmd = pre_command + [f"{finetrainers_path}/train.py"] + parallel_cmd + model_cmd + dataset_cmd + dataloader_cmd + training_cmd + optimizer_cmd + validation_cmd + miscellaneous_cmd + control_cmd
         fixed_cmd = []
         for i in range(len(cmd)):
             if cmd[i] != '':
