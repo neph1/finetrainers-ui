@@ -103,7 +103,6 @@ class RunTrainer:
         
         control_cmd = ["--rank", config.get('rank'),
                 "--lora_alpha", config.get('lora_alpha'),
-                "--target_modules",
                 "--control_type", config.get('control_type'),
                 "--frame_conditioning_index", config.get('frame_conditioning_index'),
                 "--frame_conditioning_type", config.get('frame_conditioning_type')]
