@@ -8,6 +8,7 @@ caption_dropout_technique: 'empty'
 checkpointing_limit: 102
 checkpointing_steps: 500
 cp_degree: 1
+control_type: ['none', 'canny', 'custom']
 dataloader_num_workers: 0
 dataset_config: ''
 diffusion_options: '--flow_weighting_scheme logit_normal'
@@ -17,6 +18,8 @@ enable_model_cpu_offload: false
 enable_precomputation: false
 enable_slicing: true
 enable_tiling: true
+frame_conditioning_type: ['index', 'prefix', 'random', 'first_and_last', 'full']
+frame_conditioning_index: '0'
 epsilon: 1e-8
 gpu_ids: '0'
 gradient_accumulation_steps: 4
@@ -54,13 +57,21 @@ target_modules: to_q to_k to_v to_out.0
 text_encoder_dtype: [bf16, fp16, fp32]
 text_encoder_2_dtype: [bf16, fp16, fp32]
 text_encoder_3_dtype: [bf16, fp16, fp32]
+text_encoder_id: ''
+text_encoder_2_id: ''
+text_encoder_3_id: ''
+tokenizer_id: ''
+tokenizer_2_id: ''
+tokenizer_3_id: ''
 tp_degree: 1
 tracker_name: finetrainers
 transformer_dtype: [bf16, fp16, fp32]
+transformer_id: ''
 train_steps: 3000
-training_type: ['lora', 'full-finetune']
+training_type: ['lora', 'control-lora', 'full-finetune']
 use_8bit_bnb: false
 vae_dtype: [bf16, fp16, fp32]
+vae_id: ''
 validation_dataset_file: ''
 validation_steps: 100
 weight_decay: 0.001

@@ -1,7 +1,8 @@
 Dataset: data_root, video_column, caption_column, dataset_file, id_token, image_resolution_buckets, video_resolution_buckets, caption_dropout_p, enable_precomputations, precomputation_once, precomputation_items, precomputation_dir
-Training: training_type, seed, train_steps, rank, lora_alpha, target_modules, gradient_accumulation_steps, checkpointing_steps, checkpointing_limit, enable_slicing, enable_tiling, batch_size, resume_from_checkpoint
+Training: training_type, seed, train_steps, gradient_accumulation_steps, checkpointing_steps, checkpointing_limit, enable_slicing, enable_tiling, batch_size, resume_from_checkpoint
 Optimizer: optimizer, lr, beta1, beta2, epsilon, weight_decay, max_grad_norm, lr_scheduler, lr_num_cycles, lr_warmup_steps
 Validation: validation_steps, num_validation_videos, validation_dataset_file
 Accelerate: gpu_ids, nccl_timeout, gradient_checkpointing, allow_tf32, dataloader_num_workers, report_to, accelerate_config
-Model: model_name, pretrained_model_name_or_path, text_encoder_dtype, text_encoder_2_dtype, text_encoder_3_dtype, vae_dtype, layerwise_upcasting_modules, layerwise_upcasting_storage_dtype, layerwise_upcasting_granularity, enable_model_cpu_offload
+Model: model_name, pretrained_model_name_or_path, text_encoder_dtype, text_encoder_2_dtype, text_encoder_3_dtype, vae_dtype, layerwise_upcasting_modules, layerwise_upcasting_storage_dtype, layerwise_upcasting_granularity, enable_model_cpu_offload, text_encoder_id, text_encoder_2_id, text_encoder_3_id, tokenizer_id, tokenizer_2_id, tokenized_3_id, transformer_id, vae_id
 Parallelism: parallel_backend, pp_degree, dp_degree, dp_shards, cp_degree, tp_degree, num_gpus, master_address, master_port, nproc_per_node
+Control: control_type, rank, lora_alpha, target_modules

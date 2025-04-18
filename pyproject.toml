@@ -1,9 +1,9 @@
 [project]
 name = "finetrainers-ui"
-version = "0.10.0"
+version = "0.13.0"
 dependencies = [
     "gradio",
-    "torch>=2.4.1"
+    "torch>=2.5.1"
 ]
 description = "A gradio based ui for training video transformer models with finetrainers as backend"
 readme = "README.md"
