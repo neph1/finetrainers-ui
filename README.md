@@ -14,9 +14,11 @@ I try to keep main stable, but if it fails, step back one version and try that.
 
 Recent changes:
 
-v0.12.0 Compatible with finetrainers v0.1.0 (Prelease)
+v0.14.0 Control lora and custom models settings (Prerelease)
 
-v0.11.0 Settings for Wan (finetrainers v0.0.1)
+v0.12.0 Compatible with finetrainers v0.1.0
+
+v0.11.2 Settings for Wan (finetrainers v0.0.1) <- Stable 
 
 v0.10.0: fp8 training
 
@@ -27,11 +29,11 @@ I'm migrating to the new finetrainers structure. Currently tested with LTX-Video
 
 Usage:
 
-Have ~~CogvideoX-Factory~~ finetrainers
+Have finetrainers
 
 Clone repo
 
-Install streamlit `pip install gradio`
+Install gradio `pip install gradio`
 
 Run with `python app.py`
 
